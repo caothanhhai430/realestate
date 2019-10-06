@@ -2,15 +2,15 @@ package com.javaweb.dto;
 
 public class BuildingDTO extends AbstractDTO{
 	
-	private Integer id;
+	private Long id;
 	private String name;
-	private Integer numberOfBasement;
-	private Integer buildingArea;
+	private Long numberOfBasement;
+	private Long buildingArea;
 	private String district;
 	private String ward;
 	private String street;
 	private String structure;
-	private Integer costRent;
+	private Long costRent;
 	private String serviceCost;
 	private String carCost;
 	private String motorbikeCost;
@@ -22,20 +22,20 @@ public class BuildingDTO extends AbstractDTO{
 	private String timeDecorator;
 	private String managerName;
 	private String managerPhone;
-	private Integer costRentFrom;
-	private Integer costRentTo;
-	private Integer areaRentFrom;
-	private Integer areaRentTo;
+	private Long costRentFrom;
+	private Long costRentTo;
+	private Long areaRentFrom;
+	private Long areaRentTo;
 	private String costDescription;
 	private String[] buildingType;
 	private Long staffId;
 	
 	
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -47,19 +47,19 @@ public class BuildingDTO extends AbstractDTO{
 		this.name = name;
 	}
 
-	public Integer getNumberOfBasement() {
+	public Long getNumberOfBasement() {
 		return numberOfBasement;
 	}
 
-	public void setNumberOfBasement(Integer numberOfBasement) {
+	public void setNumberOfBasement(Long numberOfBasement) {
 		this.numberOfBasement = numberOfBasement;
 	}
 
-	public Integer getBuildingArea() {
+	public Long getBuildingArea() {
 		return buildingArea;
 	}
 
-	public void setBuildingArea(Integer buildingArea) {
+	public void setBuildingArea(Long buildingArea) {
 		this.buildingArea = buildingArea;
 	}
 
@@ -95,11 +95,11 @@ public class BuildingDTO extends AbstractDTO{
 		this.structure = structure;
 	}
 
-	public Integer getCostRent() {
+	public Long getCostRent() {
 		return costRent;
 	}
 
-	public void setCostRent(Integer costRent) {
+	public void setCostRent(Long costRent) {
 		this.costRent = costRent;
 	}
 
@@ -211,35 +211,35 @@ public class BuildingDTO extends AbstractDTO{
 		
 	}
 
-	public Integer getCostRentFrom() {
+	public Long getCostRentFrom() {
 		return costRentFrom;
 	}
 
-	public void setCostRentFrom(Integer costRentFrom) {
+	public void setCostRentFrom(Long costRentFrom) {
 		this.costRentFrom = costRentFrom;
 	}
 
-	public Integer getCostRentTo() {
+	public Long getCostRentTo() {
 		return costRentTo;
 	}
 
-	public void setCostRentTo(Integer costRentTo) {
+	public void setCostRentTo(Long costRentTo) {
 		this.costRentTo = costRentTo;
 	}
 
-	public Integer getAreaRentFrom() {
+	public Long getAreaRentFrom() {
 		return areaRentFrom;
 	}
 
-	public void setAreaRentFrom(Integer areaRentFrom) {
+	public void setAreaRentFrom(Long areaRentFrom) {
 		this.areaRentFrom = areaRentFrom;
 	}
 
-	public Integer getAreaRentTo() {
+	public Long getAreaRentTo() {
 		return areaRentTo;
 	}
 
-	public void setAreaRentTo(Integer areaRentTo) {
+	public void setAreaRentTo(Long areaRentTo) {
 		this.areaRentTo = areaRentTo;
 	}
 

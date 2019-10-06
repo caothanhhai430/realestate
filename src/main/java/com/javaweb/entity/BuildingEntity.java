@@ -9,16 +9,16 @@ import com.javaweb.annotation.Table;
 public class BuildingEntity extends AbstractEntity{
 	
 	@Column(name="id")
-	private Integer id;
+	private Long id;
 
 	@Column(name="name")
 	private String name;
 
 	@Column(name="numberofbasement")
-	private Integer numberOfBasement;
+	private Long numberOfBasement;
 
 	@Column(name="buildingarea")
-	private Integer buildingArea;
+	private Long buildingArea;
 	
 	@Column(name="district")
 	private String district;
@@ -27,13 +27,13 @@ public class BuildingEntity extends AbstractEntity{
 	private String ward;
 
 	@Column(name="street")
-	private Integer street;
+	private Long street;
 	
 	@Column(name="structure")
 	private String structure;
 
 	@Column(name="costrent")
-	private Integer costRent;
+	private Long costRent;
 	
 	@Column(name="costdescription")
 	private String costDescription;
@@ -74,11 +74,11 @@ public class BuildingEntity extends AbstractEntity{
 	@Column(name="buildingtype")
 	private String buildingType;
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -90,19 +90,19 @@ public class BuildingEntity extends AbstractEntity{
 		this.name = name;
 	}
 
-	public Integer getNumberOfBasement() {
+	public Long getNumberOfBasement() {
 		return numberOfBasement;
 	}
 
-	public void setNumberOfBasement(Integer numberOfBasement) {
+	public void setNumberOfBasement(Long numberOfBasement) {
 		this.numberOfBasement = numberOfBasement;
 	}
 
-	public Integer getBuildingArea() {
+	public Long getBuildingArea() {
 		return buildingArea;
 	}
 
-	public void setBuildingArea(Integer buildingArea) {
+	public void setBuildingArea(Long buildingArea) {
 		this.buildingArea = buildingArea;
 	}
 
@@ -122,11 +122,11 @@ public class BuildingEntity extends AbstractEntity{
 		this.ward = ward;
 	}
 
-	public Integer getStreet() {
+	public Long getStreet() {
 		return street;
 	}
 
-	public void setStreet(Integer street) {
+	public void setStreet(Long street) {
 		this.street = street;
 	}
 
@@ -138,11 +138,11 @@ public class BuildingEntity extends AbstractEntity{
 		this.structure = structure;
 	}
 
-	public Integer getCostRent() {
+	public Long getCostRent() {
 		return costRent;
 	}
 
-	public void setCostRent(Integer costRent) {
+	public void setCostRent(Long costRent) {
 		this.costRent = costRent;
 	}
 

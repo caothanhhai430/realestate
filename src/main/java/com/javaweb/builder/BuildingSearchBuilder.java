@@ -2,15 +2,15 @@ package com.javaweb.builder;
 
 public class BuildingSearchBuilder {
 	private String name;
-	private Integer numberOfBasement;
-	private Integer buildingArea;
+	private Long numberOfBasement;
+	private Long buildingArea;
 	private String district;
 	private String ward;
 	private String street;
-	private Integer costRentFrom;
-	private Integer costRentTo;
-	private Integer areaRentFrom;
-	private Integer areaRentTo;
+	private Long costRentFrom;
+	private Long costRentTo;
+	private Long areaRentFrom;
+	private Long areaRentTo;
 	private String[] buildingType;
 	private Long staffId;
 	
@@ -18,11 +18,11 @@ public class BuildingSearchBuilder {
 		return name;
 	}
 
-	public Integer getNumberOfBasement() {
+	public Long getNumberOfBasement() {
 		return numberOfBasement;
 	}
 
-	public Integer getBuildingArea() {
+	public Long getBuildingArea() {
 		return buildingArea;
 	}
 
@@ -65,22 +65,22 @@ public class BuildingSearchBuilder {
 	}
 
 
-	public Integer getCostRentFrom() {
+	public Long getCostRentFrom() {
 		return costRentFrom;
 	}
 
 
-	public Integer getCostRentTo() {
+	public Long getCostRentTo() {
 		return costRentTo;
 	}
 
 
-	public Integer getAreaRentFrom() {
+	public Long getAreaRentFrom() {
 		return areaRentFrom;
 	}
 
 
-	public Integer getAreaRentTo() {
+	public Long getAreaRentTo() {
 		return areaRentTo;
 	}
 
@@ -92,15 +92,15 @@ public class BuildingSearchBuilder {
 
 	public static class Builder{
 		private String name;
-		private Integer numberOfBasement;
-		private Integer buildingArea;
+		private Long numberOfBasement;
+		private Long buildingArea;
 		private String district;
 		private String ward;
 		private String street;
-		private Integer costRentFrom;
-		private Integer costRentTo;
-		private Integer areaRentFrom;
-		private Integer areaRentTo;
+		private Long costRentFrom;
+		private Long costRentTo;
+		private Long areaRentFrom;
+		private Long areaRentTo;
 		private String[] buildingType;
 		private Long staffId;
 		
@@ -113,12 +113,12 @@ public class BuildingSearchBuilder {
 			return this;
 		}
 
-		public Builder setNumberOfBasement(Integer numberOfBasement) {
+		public Builder setNumberOfBasement(Long numberOfBasement) {
 			this.numberOfBasement = numberOfBasement;
 			return this;
 		}
 
-		public Builder setBuildingArea(Integer buildingArea) {
+		public Builder setBuildingArea(Long buildingArea) {
 			this.buildingArea = buildingArea;
 			return this;
 		}
@@ -148,11 +148,11 @@ public class BuildingSearchBuilder {
 			return name;
 		}
 
-		public Integer getNumberOfBasement() {
+		public Long getNumberOfBasement() {
 			return numberOfBasement;
 		}
 
-		public Integer getBuildingArea() {
+		public Long getBuildingArea() {
 			return buildingArea;
 		}
 
@@ -176,38 +176,38 @@ public class BuildingSearchBuilder {
 			return new BuildingSearchBuilder(this);
 		}
 
-		public Integer getCostRentFrom() {
+		public Long getCostRentFrom() {
 			return costRentFrom;
 		}
 
-		public Builder setCostRentFrom(Integer costRentFrom) {
+		public Builder setCostRentFrom(Long costRentFrom) {
 			this.costRentFrom = costRentFrom;
 			return this;
 		}
 
-		public Integer getCostRentTo() {
+		public Long getCostRentTo() {
 			return costRentTo;
 		}
 
-		public Builder setCostRentTo(Integer costRentTo) {
+		public Builder setCostRentTo(Long costRentTo) {
 			this.costRentTo = costRentTo;
 			return this;
 		}
 
-		public Integer getAreaRentFrom() {
+		public Long getAreaRentFrom() {
 			return areaRentFrom;
 		}
 
-		public Builder setAreaRentFrom(Integer areaRentFrom) {
+		public Builder setAreaRentFrom(Long areaRentFrom) {
 			this.areaRentFrom = areaRentFrom;
 			return this;
 		}
 
-		public Integer getAreaRentTo() {
+		public Long getAreaRentTo() {
 			return areaRentTo;
 		}
 
-		public Builder setAreaRentTo(Integer areaRentTo) {
+		public Builder setAreaRentTo(Long areaRentTo) {
 			this.areaRentTo = areaRentTo;
 			return this;
 		}
