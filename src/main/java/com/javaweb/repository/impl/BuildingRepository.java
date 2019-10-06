@@ -32,7 +32,7 @@ public class BuildingRepository extends SimpleRepository<BuildingEntity>{
 //				.setJoin("INNER JOIN")
 //				.setTableName2("assignmentstaff")
 //				.setOn("A.id = B.buildingid")
-//				.addWhere(where)
+				.addWhere(where)
 //				.addWhere("AND B.staffid = 1")
 				.setLimit(limit).build();
 		System.out.println(SQL);
