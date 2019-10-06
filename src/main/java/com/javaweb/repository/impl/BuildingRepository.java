@@ -59,7 +59,7 @@ public class BuildingRepository extends SimpleRepository<BuildingEntity>{
 			}
 			sql.append(")");
 		}
-		if(builder.getBuildingType().length>0) {
+		if(builder.getBuildingType()!=null && builder.getBuildingType().length>0) {
 			
 			sql.append(" And (");
 			String s = Arrays.stream(builder.getBuildingType())
