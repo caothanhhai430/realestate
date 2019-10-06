@@ -17,10 +17,6 @@ public class BuildingRepository extends SimpleRepository<BuildingEntity>{
 	public List<BuildingEntity> findAll(Map<String,Object> properties,
 			Pageable pageable,BuildingSearchBuilder builder){
 		
-		String specialSQL = getSpecialSQL(builder);	
-		String where = MapToSqlSearch.toSql(properties).toString() + specialSQL;
-		String limit = PageToSqlSearch.toSql(pageable).toString();
-		
 		SqlBuilder sqlBuilder = new SqlBuilder()
 				.setTableName(getTableName());
 		if(builder.getStaffId()!=null) {
@@ -28,7 +24,11 @@ public class BuildingRepository extends SimpleRepository<BuildingEntity>{
 			.setOn("A.id=B.buildingid")
 			.addWhere("AND staffid="+builder.getStaffId());
 		}
-		String SQL = sqlBuilder.addWhere(where).setLimit(limit).build();
+		String SQL = sqlBuilder
+				.addWhere(MapToSqlSearch.toSql(properties).toString().trim())
+				.addWhere(getSpecialSQL(builder).trim())
+				.setLimit(PageToSqlSearch.toSql(pageable).toString()).build();
+		
 		System.out.println(SQL);
 		return find(SQL);
 		
@@ -37,27 +37,27 @@ public class BuildingRepository extends SimpleRepository<BuildingEntity>{
 	private String getSpecialSQL(BuildingSearchBuilder builder) {
 		StringBuilder sql = new StringBuilder();
 		if(builder.getCostRentFrom()!=null) {
-			sql.append(" And costrent >="+builder.getCostRentFrom());
+			sql.append(" AND costrent >="+builder.getCostRentFrom());
 		}
 		if(builder.getCostRentTo()!=null) {
-			sql.append(" And costrent <="+builder.getCostRentTo());
+			sql.append(" AND costrent <="+builder.getCostRentTo());
 		}
 		
 		if(builder.getAreaRentFrom()!=null || builder.getAreaRentTo()!=null) {
-			sql.append(" And Exists (Select * From rentarea ra Where ra.buildingid=A.id");
+			sql.append(" AND EXISTS (SELECT * FROM rentarea ra WHERE ra.buildingid=A.id");
 			if(builder.getAreaRentFrom()!=null){
-				sql.append(" And ra.value >="+builder.getAreaRentFrom());
+				sql.append(" AND ra.value >="+builder.getAreaRentFrom());
 			}
 			if(builder.getAreaRentTo()!=null){
-				sql.append(" And ra.value <="+builder.getAreaRentTo());
+				sql.append(" AND ra.value <="+builder.getAreaRentTo());
 			}
 			sql.append(")");
 		}
 		if(builder.getBuildingType()!=null && builder.getBuildingType().length>0) {
 			
-			sql.append(" And (");
+			sql.append(" AND (");
 			String s = Arrays.stream(builder.getBuildingType())
-			.map(e->"type Like '%"+e+"%'").collect(Collectors.joining(" OR "));
+			.map(e->"type LIKE '%"+e+"%'").collect(Collectors.joining(" OR "));
 			sql.append(s+")");
 			
 	}

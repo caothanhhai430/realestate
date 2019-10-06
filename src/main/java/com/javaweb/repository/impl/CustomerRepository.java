@@ -26,6 +26,7 @@ public class CustomerRepository extends SimpleRepository<CustomerEntity>{
 			.addWhere("AND staffid="+builder.getStaffId());
 		}
 		String SQL = sqlBuilder.addWhere(where).setLimit(limit).build();
+		
 		System.out.println(SQL);
 		List<CustomerEntity> resutls =  find(SQL);
 		return resutls;
