@@ -94,4 +94,10 @@ CREATE TABLE customer(
 )
 
 
+CREATE TABLE staff_customer (
+  id bigint NOT NULL PRIMARY KEY auto_increment,
+  customerid bigint NOT NULL,
+  staffid bigint NOT NULL
+);
+
 ALTER TABLE rentarea ADD CONSTRAINT fk_rentarea_building FOREIGN KEY (buildingid) REFERENCES building(id);

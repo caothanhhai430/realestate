@@ -2,18 +2,19 @@ package com.javaweb.dto;
 
 public class CustomerDTO extends AbstractDTO{
 	
-	private Integer id;
+	private Long id;
 	private String name;
 	private String phone;
 	private String email;
 	private String company;
 	private String demand;
 	private String note;
+	private Long staffId;
 	
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -51,6 +52,12 @@ public class CustomerDTO extends AbstractDTO{
 	}
 	public void setNote(String note) {
 		this.note = note;
+	}
+	public Long getStaffId() {
+		return staffId;
+	}
+	public void setStaffId(Long staffId) {
+		this.staffId = staffId;
 	}
 	
 }

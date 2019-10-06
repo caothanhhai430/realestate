@@ -12,9 +12,9 @@ public class MapToSqlSearch {
         	Object obj = map.get(key);
         	
         	if(obj instanceof String) {
-        		where.append("And "+ key +" Like '%"+ obj + "%'"); 		
-        	}else if(obj instanceof Integer) {
-        		where.append("And "+ key +"="+ String.valueOf(obj)+" ");
+        		where.append("AND "+ key +" LIKE '%"+ obj + "%'"); 		
+        	}else if(obj instanceof Integer || obj instanceof Long ) {
+        		where.append("AND "+ key +"="+ String.valueOf(obj)+" ");
         	}
         }
 		return where;

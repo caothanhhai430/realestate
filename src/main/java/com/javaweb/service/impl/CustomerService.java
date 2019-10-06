@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.javaweb.Helper.ObjectToMap;
+import com.javaweb.builder.CustomerSearchBuilder;
 import com.javaweb.converter.DTOConverter;
 import com.javaweb.dto.CustomerDTO;
 import com.javaweb.paging.Pageable;
@@ -15,10 +16,15 @@ public class CustomerService implements ICustomerService{
 
 	@Override
 	public List<CustomerDTO> findAll(CustomerDTO dto, Pageable pageable) {
-
-		Map<String,Object> properties = ObjectToMap.toMap(dto);
+		CustomerSearchBuilder singleFieldBuilder = new CustomerSearchBuilder.Builder()
+				.setName(dto.getName()).setEmail(dto.getEmail())
+				.setPhone(dto.getPhone()).build();
+		CustomerSearchBuilder specialFieldBuilder = new CustomerSearchBuilder.Builder()
+				.setStaffId(dto.getStaffId()).build();
+		
+		Map<String,Object> properties = ObjectToMap.toMap(singleFieldBuilder);
 		return new CustomerRepository()
-				.findAll(properties,pageable).stream()
+				.findAll(properties,pageable,specialFieldBuilder).stream()
 				.map(item-> (CustomerDTO)DTOConverter.convertToDTO(item,CustomerDTO.class))
 				.collect(Collectors.toList());
 	}

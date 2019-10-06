@@ -2,7 +2,7 @@ package com.javaweb.service;
 
 import java.util.List;
 
-import com.javaweb.builder.BuildingBuilder;
+import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.dto.BuildingDTO;
 import com.javaweb.paging.Pageable;
 

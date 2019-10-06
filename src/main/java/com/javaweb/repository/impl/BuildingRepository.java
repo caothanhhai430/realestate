@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import com.javaweb.Helper.MapToSqlSearch;
 import com.javaweb.Helper.PageToSqlSearch;
-import com.javaweb.builder.BuildingBuilder;
+import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.builder.SqlBuilder;
 import com.javaweb.entity.BuildingEntity;
 import com.javaweb.paging.Pageable;
@@ -15,32 +15,26 @@ import com.javaweb.paging.Pageable;
 public class BuildingRepository extends SimpleRepository<BuildingEntity>{
 
 	public List<BuildingEntity> findAll(Map<String,Object> properties,
-			Pageable pageable,BuildingBuilder builder){
+			Pageable pageable,BuildingSearchBuilder builder){
 		
 		String specialSQL = getSpecialSQL(builder);	
 		String where = MapToSqlSearch.toSql(properties).toString() + specialSQL;
 		String limit = PageToSqlSearch.toSql(pageable).toString();
 		
-		String SQL = new SqlBuilder()
-				.setTableName(getTableName())
-//				.addListSelect("id")
-//				.addListSelect("name")
-//				.addListSelect("numberofbasement")
-//				.addListSelect("costrent")
-//				.addListSelect("buildingarea")
-//				.addListSelect("district")
-//				.setJoin("INNER JOIN")
-//				.setTableName2("assignmentstaff")
-//				.setOn("A.id = B.buildingid")
-				.addWhere(where)
-//				.addWhere("AND B.staffid = 1")
-				.setLimit(limit).build();
+		SqlBuilder sqlBuilder = new SqlBuilder()
+				.setTableName(getTableName());
+		if(builder.getStaffId()!=null) {
+			sqlBuilder.setJoin("INNER").setTableName2("assignmentstaff")
+			.setOn("A.id=B.buildingid")
+			.addWhere("AND staffid="+builder.getStaffId());
+		}
+		String SQL = sqlBuilder.addWhere(where).setLimit(limit).build();
 		System.out.println(SQL);
 		return find(SQL);
 		
 	}
 	
-	private String getSpecialSQL(BuildingBuilder builder) {
+	private String getSpecialSQL(BuildingSearchBuilder builder) {
 		StringBuilder sql = new StringBuilder();
 		if(builder.getCostRentFrom()!=null) {
 			sql.append(" And costrent >="+builder.getCostRentFrom());

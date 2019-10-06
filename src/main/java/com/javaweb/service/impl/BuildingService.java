@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.javaweb.Helper.ObjectToMap;
-import com.javaweb.builder.BuildingBuilder;
+import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.converter.DTOConverter;
 import com.javaweb.dto.BuildingDTO;
 import com.javaweb.entity.BuildingEntity;
@@ -17,25 +17,19 @@ public class BuildingService implements IBuildingService{
 
 	@Override
 	public List<BuildingDTO> findAll(BuildingDTO dto, Pageable pageable) {
-		BuildingBuilder buildingBuilder = new BuildingBuilder
-				.Builder()
-				.setBuildingType(dto.getBuildingType())
-				.setAreaRentFrom(dto.getAreaRentFrom())
-				.setAreaRentTo(dto.getAreaRentTo())
-				.setCostRentFrom(dto.getCostRentFrom())
-				.setCostRentTo(dto.getCostRentTo())
-				.build();
-		dto.setAreaRentFrom(null);
-		dto.setAreaRentTo(null);
-		dto.setCostRentFrom(null);
-		dto.setCostRentTo(null);
-//		dto.setCostRent(null);
-//		dto.setBuildingType(null);
-//		dto.setBuildingArea(null);
+		BuildingSearchBuilder specialFieldBuilder = new BuildingSearchBuilder.Builder()
+				.setBuildingType(dto.getBuildingType()).setAreaRentFrom(dto.getAreaRentFrom())
+				.setAreaRentTo(dto.getAreaRentTo()).setCostRentFrom(dto.getCostRentFrom())
+				.setCostRentTo(dto.getCostRentTo()).setStaffId(dto.getStaffId()).build();
 		
-		Map<String,Object> properties = ObjectToMap.toMap(dto);
+		BuildingSearchBuilder singleFieldBuilder = new BuildingSearchBuilder.Builder()
+				.setName(dto.getName()).setNumberOfBasement(dto.getNumberOfBasement())
+				.setBuildingArea(dto.getBuildingArea()).setDistrict(dto.getDistrict())
+				.setWard(dto.getWard()).setStreet(dto.getStreet()).build();
+		
+		Map<String,Object> properties = ObjectToMap.toMap(singleFieldBuilder);
 		return new BuildingRepository()
-				.findAll(properties,pageable,buildingBuilder).stream()
+				.findAll(properties,pageable,specialFieldBuilder).stream()
 				.map(item-> (BuildingDTO)DTOConverter.convertToDTO(item,BuildingDTO.class))
 				.collect(Collectors.toList());
 		

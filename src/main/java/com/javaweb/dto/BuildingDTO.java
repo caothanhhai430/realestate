@@ -28,7 +28,9 @@ public class BuildingDTO extends AbstractDTO{
 	private Integer areaRentTo;
 	private String costDescription;
 	private String[] buildingType;
-
+	private Long staffId;
+	
+	
 	public Integer getId() {
 		return id;
 	}
@@ -239,6 +241,14 @@ public class BuildingDTO extends AbstractDTO{
 
 	public void setAreaRentTo(Integer areaRentTo) {
 		this.areaRentTo = areaRentTo;
+	}
+
+	public Long getStaffId() {
+		return staffId;
+	}
+
+	public void setStaffId(Long staffId) {
+		this.staffId = staffId;
 	}
 
 }

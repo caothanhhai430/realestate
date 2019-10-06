@@ -62,10 +62,10 @@ public class SqlBuilder {
 		sql.append(" FROM "+tableName + " A");
 	
 		if(StringUtils.isNotBlank(join) && StringUtils.isNotBlank(tableName2) && StringUtils.isNotBlank(on)) {
-			sql.append(" " + join).append(" " + tableName2 + " B").append(" ON " + on);
+			sql.append(" " + join + " JOIN").append(" " + tableName2 + " B").append(" ON " + on);
 		}
 		if(StringUtils.isNotBlank(where.toString())) {
-			sql.append(" WHERE 1=1 " + where.toString());
+			sql.append(" WHERE 1=1" + where.toString());
 		}
 		if(StringUtils.isNotBlank(limit)) {
 			sql.append(" " + limit);

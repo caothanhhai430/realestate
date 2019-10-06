@@ -7,7 +7,7 @@ public class PageToSqlSearch {
 		StringBuilder where = new StringBuilder();
 		if(pageable==null) return where;
 		if(pageable.getPage()!=null && pageable.getLimit()!=null) {
-			where.append("Limit ");
+			where.append("LIMIT ");
 			where.append(pageable.getPage()+","+pageable.getLimit());
 		}
 		
