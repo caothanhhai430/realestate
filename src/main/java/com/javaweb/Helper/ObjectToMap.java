@@ -19,20 +19,8 @@ public class ObjectToMap {
 				
 				for(Field field : fields) {
 					field.setAccessible(true);
-//					String data = BeanUtils.getProperty(dto, field.getName());		
 					Object obj = field.get(dto);
-					
-//					String fieldType = field.getType().getName();
-//					if(data!=null) {
-//						if (fieldType.equals(Integer.class.getName())){
-//							obj = Integer.valueOf(data);
-//						}else if (fieldType.equals(String.class.getName())){
-//							obj = String.valueOf(data);
-//						}else if (fieldType.equals(Timestamp.class.getName())){
-//							obj = Timestamp.valueOf(data);
-//						}
-//					}
-//					
+						
 					if(obj!=null) {
 						map.put(field.getName(), obj);
 					}

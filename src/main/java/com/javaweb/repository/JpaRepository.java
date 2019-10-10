@@ -6,8 +6,7 @@ import java.util.Map;
 import com.javaweb.paging.Pageable;
 
 public interface JpaRepository<T> {
-	List<T> find(Map<String,Object> properies,Pageable pageable,String specialSql);
-	List<T> find(String sql);
-	T findById(int id);
+	List<T> findAll(String sql);
+	T findById(long id);
 	Integer save(Map<String,Object> properties);
 }

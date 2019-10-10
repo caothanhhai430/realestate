@@ -84,13 +84,19 @@ CREATE TABLE rentarea(
 
 
 CREATE TABLE customer(
-	id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     name NVARCHAR(255) NULL,
     phone NVARCHAR(255) NULL,
     email NVARCHAR(255) NULL,
     demand NVARCHAR(255) NULL,
     company NVARCHAR(255) NULL,
-    note TEXT NULL
+    note NVARCHAR(255) NULL,
+    status byte NULL,
+    
+    createddate DATETIME NULL,
+	modifieddate DATETIME NULL,
+	createdby VARCHAR(255) NULL,
+	modifiedby VARCHAR(255) NULL
 )
 
 
@@ -99,5 +105,19 @@ CREATE TABLE staff_customer (
   customerid bigint NOT NULL,
   staffid bigint NOT NULL
 );
+
+CREATE TABLE note(
+	id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	cus_staff BIGINT NOT NULL,
+	value TEXT NULL,
+	role int NULL,
+	
+	createddate DATETIME NULL,
+	modifieddate DATETIME NULL,
+	createdby VARCHAR(255) NULL,
+	modifiedby VARCHAR(255) NULL
+)
+
+
 
 ALTER TABLE rentarea ADD CONSTRAINT fk_rentarea_building FOREIGN KEY (buildingid) REFERENCES building(id);

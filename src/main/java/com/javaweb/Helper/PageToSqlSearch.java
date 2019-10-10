@@ -3,14 +3,14 @@ package com.javaweb.Helper;
 import com.javaweb.paging.Pageable;
 
 public class PageToSqlSearch {
-	public static StringBuilder toSql(Pageable pageable) {
+	public static String toSql(Pageable pageable) {
 		StringBuilder where = new StringBuilder();
-		if(pageable==null) return where;
-		if(pageable.getPage()!=null && pageable.getLimit()!=null) {
+		
+		if(pageable!=null && pageable.getPage()!=null && pageable.getLimit()!=null) {
 			where.append("LIMIT ");
 			where.append(pageable.getPage()+","+pageable.getLimit());
 		}
 		
-		return where;
+		return where.toString();
 	}
 }

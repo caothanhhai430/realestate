@@ -56,7 +56,7 @@ public class SqlBuilder {
 			listSelect.add("*");
 		}
 		sql.append("SELECT ");
-		String listSelect = this.listSelect.stream().map(e-> "A."+e).collect(Collectors.joining(", "));
+		String listSelect = this.listSelect.stream().map(e-> ((join!=null)? "A.":"") + e).collect(Collectors.joining(", "));
 		
 		sql.append(listSelect);
 		sql.append(" FROM "+tableName + " A");

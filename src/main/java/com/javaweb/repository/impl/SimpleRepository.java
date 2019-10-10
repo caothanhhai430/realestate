@@ -33,59 +33,6 @@ public class SimpleRepository<T> implements JpaRepository<T> {
 	
 		
 	}	
-	@Override
-	public List<T> find(Map<String,Object> properies,Pageable pageable,String specialSql) {
-		
-		StringBuilder sql = new StringBuilder();
-		sql.append("select * from " + getTableName()+ " A where 1=1 ");
-		sql.append(MapToSqlSearch.toSql(properies));
-		sql.append(specialSql);
-		sql.append(PageToSqlSearch.toSql(pageable));
-		System.out.println(sql.toString());
-		
-		String SQL = new SqlBuilder().setTableName(getTableName())
-		.addWhere(MapToSqlSearch.toSql(properies).toString() + specialSql)
-		.setLimit(PageToSqlSearch.toSql(pageable).toString()).build();
-		
-		System.out.println(SQL);
-		
-		
-		
-		List<T> results = new ArrayList<>();
-		Connection connection = EntityManagerFactory.getConnection();
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
-		if(connection != null) {
-			try {
-				statement = connection.prepareStatement(sql.toString());
-				resultSet = statement.executeQuery();
-				results = new ResultSetMapper<T>().rowMapper(resultSet, zClass);
-				
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}finally {
-						try {
-							if(connection!=null) {
-							connection.close();
-							}
-							if(statement != null) {
-								statement.close();
-							}
-							if(resultSet != null) {
-								resultSet.close();
-							}
-						}
-						 catch (SQLException e) {
-							e.printStackTrace();
-							return null;
-						}
-					}
-				
-		}
-		
-		return results;
-
-	}
 	
 	public String getTableName() {
 		String tableName = "";
@@ -99,7 +46,7 @@ public class SimpleRepository<T> implements JpaRepository<T> {
 	@Override
 	public Integer save(Map<String, Object> properties) {
 		Integer currentRow=null;
-		StringBuilder sql = new StringBuilder("insert into ")
+		StringBuilder sql = new StringBuilder("INSERT INTO ")
 				.append(getTableName());
 		sql.append(MapToSqlInsert.toSql(properties)); 	
 		
@@ -117,7 +64,6 @@ public class SimpleRepository<T> implements JpaRepository<T> {
 				    currentRow=rs.getInt(1);
 				}
 				
-				System.out.print("resultSet = "+currentRow);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -145,16 +91,14 @@ public class SimpleRepository<T> implements JpaRepository<T> {
 	}
 	@SuppressWarnings("unchecked")
 	@Override
-	public T findById(int id) {
-		Map<String,Object> map = new HashMap<>();
-		map.put("id", id);
-		BuildingEntity e = (BuildingEntity) find(map,null,null).get(0); 
-		return (T) e; 
+	public T findById(long id) {
+		String sql = "SELECT * FROM " + getTableName() + " WHERE id="+ id;
+		return findAll(sql).get(0);
 	}
 	
 	@Override
-	public List<T> find(String sql) {
-		
+	public List<T> findAll(String sql) {
+		System.out.println(sql);
 		List<T> results = new ArrayList<>();
 		Connection connection = EntityManagerFactory.getConnection();
 		PreparedStatement statement = null;

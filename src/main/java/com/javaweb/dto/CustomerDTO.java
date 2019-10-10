@@ -9,6 +9,7 @@ public class CustomerDTO extends AbstractDTO{
 	private String company;
 	private String demand;
 	private String note;
+	private Byte status;
 	private Long staffId;
 	
 	public Long getId() {
@@ -58,6 +59,12 @@ public class CustomerDTO extends AbstractDTO{
 	}
 	public void setStaffId(Long staffId) {
 		this.staffId = staffId;
+	}
+	public Byte getStatus() {
+		return status;
+	}
+	public void setStatus(Byte status) {
+		this.status = status;
 	}
 	
 }

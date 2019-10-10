@@ -4,9 +4,9 @@ import java.util.Map;
 import java.util.Set;
 
 public class MapToSqlSearch {
-	public static StringBuilder toSql(Map<String,Object> map) {
+	public static String toSql(Map<String,Object> map) {
 		StringBuilder where = new StringBuilder();
-		if(map==null) return where;
+		if(map==null) return "";
 		Set<String> set = map.keySet();
         for (String key : set) {
         	Object obj = map.get(key);
@@ -17,6 +17,6 @@ public class MapToSqlSearch {
         		where.append(" AND "+ key +"="+ String.valueOf(obj));
         	}
         }
-		return where;
+		return where.toString();
 	}
 }

@@ -25,12 +25,11 @@ public class BuildingRepository extends SimpleRepository<BuildingEntity>{
 			.addWhere("AND staffid="+builder.getStaffId());
 		}
 		String SQL = sqlBuilder
-				.addWhere(MapToSqlSearch.toSql(properties).toString().trim())
+				.addWhere(MapToSqlSearch.toSql(properties).trim())
 				.addWhere(getSpecialSQL(builder).trim())
-				.setLimit(PageToSqlSearch.toSql(pageable).toString()).build();
+				.setLimit(PageToSqlSearch.toSql(pageable)).build();
 		
-		System.out.println(SQL);
-		return find(SQL);
+		return findAll(SQL);
 		
 	}
 	

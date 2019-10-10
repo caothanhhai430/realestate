@@ -27,6 +27,9 @@ public class CustomerEntity extends AbstractEntity{
 	@Column(name="demand")
 	private String demand;
 
+	@Column(name="status")
+	private Byte status;
+	
 	@Column(name="note")
 	private String note;
 
@@ -85,5 +88,14 @@ public class CustomerEntity extends AbstractEntity{
 	public void setNote(String note) {
 		this.note = note;
 	}
+
+	public Byte getStatus() {
+		return status;
+	}
+
+	public void setStatus(Byte status) {
+		this.status = status;
+	}
+	
 	
 }

@@ -15,8 +15,8 @@ public class CustomerRepository extends SimpleRepository<CustomerEntity>{
 	public List<CustomerEntity> findAll(Map<String,Object> properties,
 			Pageable pageable, CustomerSearchBuilder builder){
 		
-		String where = MapToSqlSearch.toSql(properties).toString();
-		String limit = PageToSqlSearch.toSql(pageable).toString();
+		String where = MapToSqlSearch.toSql(properties);
+		String limit = PageToSqlSearch.toSql(pageable);
 		
 		SqlBuilder sqlBuilder = new SqlBuilder()
 				.setTableName(getTableName());
@@ -27,8 +27,7 @@ public class CustomerRepository extends SimpleRepository<CustomerEntity>{
 		}
 		String SQL = sqlBuilder.addWhere(where).setLimit(limit).build();
 		
-		System.out.println(SQL);
-		List<CustomerEntity> resutls =  find(SQL);
+		List<CustomerEntity> resutls =  findAll(SQL);
 		return resutls;
 	}
 	
