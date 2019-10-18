@@ -7,7 +7,7 @@ import com.javaweb.paging.Pageable;
 
 public interface ICustomerService {
 	public List<CustomerDTO> findAll(CustomerDTO dto,Pageable pageable);
-	public CustomerDTO findById(int id);
+	public CustomerDTO findById(long id);
 	public Integer save(CustomerDTO building);
 
 }

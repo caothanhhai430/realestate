@@ -1,5 +1,6 @@
 package com.javaweb.repository.impl;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.sql.Connection;
@@ -14,6 +15,7 @@ import java.util.Map;
 import com.javaweb.Helper.MapToSqlInsert;
 import com.javaweb.Helper.MapToSqlSearch;
 import com.javaweb.Helper.PageToSqlSearch;
+import com.javaweb.annotation.Column;
 import com.javaweb.annotation.Table;
 import com.javaweb.builder.SqlBuilder;
 import com.javaweb.entity.BuildingEntity;
@@ -89,6 +91,110 @@ public class SimpleRepository<T> implements JpaRepository<T> {
 		
 		return currentRow;
 	}
+	
+	@Override
+	public Long insert(Object object) {
+		Long id=null;
+		String sql = this.createSQLInsert(object);
+		System.out.println(sql);
+		Connection connection = EntityManagerFactory.getConnection();
+		PreparedStatement statement = null;
+		
+		if(connection != null) {
+			try {
+				statement = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+				connection.setAutoCommit(false);
+				Class<?> aClass = object.getClass();
+				int index = 1;
+				while(aClass!=null) {
+					Field[] fields = aClass.getDeclaredFields();
+					for(int i=0;i<fields.length;i++) {					
+						Field field = fields[i];
+						field.setAccessible(true);
+						Object obj = field.get(object);
+						if(obj!=null) {	
+							statement.setObject(index, obj);
+							index += 1;
+						}
+					}
+					aClass = aClass.getSuperclass();
+				}
+				
+				
+				
+				statement.executeUpdate();
+				ResultSet rs = statement.getGeneratedKeys();
+				
+				if (rs.next()){
+				    id=rs.getLong(1);
+				}
+				connection.commit();
+				
+			} catch (SQLException | IllegalArgumentException | IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+						try {
+							if(connection!=null) {
+							connection.close();
+							}
+							if(statement != null) {
+								statement.close();
+							}
+						}
+						 catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+							
+						}
+					}
+				
+		}
+		
+
+		
+		return id;
+
+	}
+	
+	private String createSQLInsert(Object obj) {
+		StringBuilder fields = new StringBuilder("");
+		StringBuilder params = new StringBuilder("");
+		Class<?> aClass = zClass;
+		while(aClass!=null) {
+		for(Field field : aClass.getDeclaredFields()) {
+				field.setAccessible(true);
+				try {
+					if(field.get(obj)==null) {
+						continue;
+					}
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if(fields.length()>0) {
+					fields.append(",");
+					params.append(",");
+				}
+				if(field.isAnnotationPresent(Column.class)) {
+					Column column = field.getAnnotation(Column.class);
+					fields.append(column.name());
+					params.append("?");
+				}
+			}
+			aClass = aClass.getSuperclass();
+		}
+		String sql = "INSERT INTO " + this.getTableName() + " (" + fields.toString() + ")"
+				+ " VALUES(" + params.toString() + ")";
+		return sql;
+	
+	}
+	
+	
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public T findById(long id) {

@@ -9,4 +9,5 @@ public interface JpaRepository<T> {
 	List<T> findAll(String sql);
 	T findById(long id);
 	Integer save(Map<String,Object> properties);
+	public Long insert(Object object);
 }
