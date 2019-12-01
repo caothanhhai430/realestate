@@ -1,6 +1,7 @@
 package com.javaweb.api;
 
 import java.io.IOException;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -51,9 +52,9 @@ public class BuildingAPI extends HttpServlet{
 		building.setModifiedDate(new Timestamp(System.currentTimeMillis()));
 		
 		BuildingService service = new BuildingService();
-		Integer row = service.save(building);
+		Long id = service.save(building);
 		
-		BuildingDTO get = service.findById(row);
+		BuildingDTO get = service.findById(id);
 		obj.writeValue(resp.getOutputStream(), get);
 		
 	}

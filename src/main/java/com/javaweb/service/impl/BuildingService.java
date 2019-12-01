@@ -30,22 +30,21 @@ public class BuildingService implements IBuildingService{
 		Map<String,Object> properties = ObjectToMap.toMap(singleFieldBuilder);
 		return new BuildingRepository()
 				.findAll(properties,pageable,specialFieldBuilder).stream()
-				.map(item-> (BuildingDTO)DTOConverter.convertToDTO(item,BuildingDTO.class))
+				.map(item-> (BuildingDTO)DTOConverter.toModel(item,BuildingDTO.class))
 				.collect(Collectors.toList());
 		
 	}
 
 	@Override
-	public Integer save(BuildingDTO building) {
-		Map<String,Object> properties = ObjectToMap.toMap(building);
-		return new BuildingRepository().save(properties);
+	public BuildingDTO findById(long id) {
+		BuildingEntity e = new BuildingRepository().findById(id);
+		return DTOConverter.toModel(e, BuildingDTO.class);
 	}
 
 	@Override
-	public BuildingDTO findById(int id) {
-		// TODO Auto-generated method stub
-		BuildingEntity e = new BuildingRepository().findById(id);
-		return DTOConverter.convertToDTO(e, BuildingDTO.class);
+	public Long save(BuildingDTO building) {
+		BuildingEntity entity = DTOConverter.toModel(building, BuildingEntity.class);
+		return new BuildingRepository().save(entity);
 	}
 	
 }

@@ -54,27 +54,34 @@ public class CustomerAPI extends HttpServlet{
 		Customer.setModifiedDate(new Timestamp(System.currentTimeMillis()));
 		
 		CustomerService service = new CustomerService();
-//		Integer row = service.save(Customer);
-		
-//		CustomerDTO get = service.findById(row);
-		CustomerRepository c = new CustomerRepository();
-		CustomerEntity en = DTOConverter.convertToDTO(Customer, CustomerEntity.class);
-		Long id =  c.insert(en);
-
+		Long id = service.save(Customer);		
 		CustomerDTO get = service.findById(id);
 		obj.writeValue(resp.getOutputStream(), get);
 	}
 
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doPut(req, resp);
+		ObjectMapper obj = new ObjectMapper();
+		req.setCharacterEncoding("UTF-8");
+		resp.setContentType("application/json");
+		CustomerDTO Customer = HttpUtil.of(req.getReader()).toModel(CustomerDTO.class);
+		Customer.setModifiedBy("admin");
+		Customer.setModifiedDate(new Timestamp(System.currentTimeMillis()));
+		
+		CustomerService service = new CustomerService();
+		Long id = service.update(Customer);		
+		CustomerDTO get = service.findById(id);
+		obj.writeValue(resp.getOutputStream(), get);
 	}
 
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doDelete(req, resp);
+		CustomerDTO customer = HttpUtil.of(req.getReader()).toModel(CustomerDTO.class);
+		CustomerService service = new CustomerService();
+		long[] ids = customer.getIds();
+		if(ids!=null && ids.length>0) {
+			service.delete(customer.getIds());
+		}
 	}
 
 	

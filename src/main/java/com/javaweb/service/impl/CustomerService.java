@@ -26,21 +26,37 @@ public class CustomerService implements ICustomerService{
 		Map<String,Object> properties = ObjectToMap.toMap(singleFieldBuilder);
 		return new CustomerRepository()
 				.findAll(properties,pageable,specialFieldBuilder).stream()
-				.map(item-> (CustomerDTO)DTOConverter.convertToDTO(item,CustomerDTO.class))
+				.map(item-> (CustomerDTO)DTOConverter.toModel(item,CustomerDTO.class))
 				.collect(Collectors.toList());
 	}
 
 	@Override
 	public CustomerDTO findById(long id) {
 		CustomerEntity en = new CustomerRepository().findById(id);
-		return DTOConverter.convertToDTO(en, CustomerDTO.class);
+		return DTOConverter.toModel(en, CustomerDTO.class);
 		
 	}
 
 	@Override
-	public Integer save(CustomerDTO Customer) {
-		// TODO Auto-generated method stub
-		return null;
+	public Long save(CustomerDTO customer) {
+		CustomerEntity entity = DTOConverter.toModel(customer,CustomerEntity.class);
+		return new CustomerRepository().save(entity);
+	}
+
+	@Override
+	public Long update(CustomerDTO customer) {
+		CustomerEntity entity = DTOConverter.toModel(customer,CustomerEntity.class);
+		return new CustomerRepository().update(entity);
+	}
+
+	@Override
+	public void delete(long[] id) {
+		new CustomerRepository().delete(id);
+	}
+
+	@Override
+	public void delete(long id) {
+		new CustomerRepository().delete(id);
 	}
 
 }

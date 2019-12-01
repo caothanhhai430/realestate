@@ -9,13 +9,13 @@ public class AbstractEntity {
 	@Column(name="createddate")
 	protected Timestamp createdDate;
 	
-	@Column(name="createdBy")
+	@Column(name="createdby")
 	protected String createdBy;
 	
-	@Column(name="modifiedDate")
+	@Column(name="modifieddate")
 	protected Timestamp modifiedDate; 
 	
-	@Column(name="modifiedBy")
+	@Column(name="modifiedby")
 	protected String modifiedBy;
 
 	public Timestamp getCreatedDate() {

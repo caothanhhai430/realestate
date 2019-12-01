@@ -8,6 +8,8 @@ import com.javaweb.paging.Pageable;
 public interface JpaRepository<T> {
 	List<T> findAll(String sql);
 	T findById(long id);
-	Integer save(Map<String,Object> properties);
-	public Long insert(Object object);
+	public Long save(Object object);
+	public Long update(Object object);
+	public void delete(long id[]);
+	public void delete(long id);
 }
