@@ -15,7 +15,17 @@ public class FormUtils {
 		try {
 			t = tclass.newInstance();
 			Map<String, String[]> map = req.getParameterMap();;
-			BeanUtils.populate(t, req.getParameterMap());
+//			BeanUtils.populate(t, map);
+			 for(final Map.Entry<String, String[]> entry : map.entrySet()) {
+		            // Identify the property name and value(s) to be assigned
+		            final String name = entry.getKey();
+		            final String[] obj = entry.getValue();
+		            if (name == null || obj == null || (obj.length==1 && obj[0].equals(""))) {
+		            	continue;
+		            }
+	            	BeanUtils.setProperty(t, name, obj);
+		    }
+			
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

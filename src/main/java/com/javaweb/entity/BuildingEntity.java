@@ -44,7 +44,7 @@ public class BuildingEntity extends AbstractEntity{
 	@Column(name="carcost")
 	private String carCost;
 
-	@Column(name="motorbikecose")
+	@Column(name="motorbikecost")
 	private String motorbikeCost;
 
 	@Column(name="overtimecost")
@@ -71,8 +71,10 @@ public class BuildingEntity extends AbstractEntity{
 	@Column(name="managerphone")
 	private String managerPhone;
 	
-	@Column(name="buildingtype")
+	@Column(name="type")
 	private String buildingType;
+	
+	
 
 	public Long getId() {
 		return id;

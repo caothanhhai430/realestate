@@ -8,6 +8,7 @@ public class BuildingDTO extends AbstractDTO{
 	private Long buildingArea;
 	private String district;
 	private String ward;
+	private String rentArea;
 	private String street;
 	private String structure;
 	private Long costRent;
@@ -249,6 +250,14 @@ public class BuildingDTO extends AbstractDTO{
 
 	public void setStaffId(Long staffId) {
 		this.staffId = staffId;
+	}
+
+	public String getRentArea() {
+		return rentArea;
+	}
+
+	public void setRentArea(String rentArea) {
+		this.rentArea = rentArea;
 	}
 
 }
