@@ -8,6 +8,8 @@ public class AbstractDTO {
 	protected String createdBy;
 	protected Timestamp modifiedDate; 
 	protected String modifiedBy;
+	protected Integer page;
+	protected Integer size;
 
 	public Timestamp getCreatedDate() {
 		return createdDate;
@@ -41,4 +43,19 @@ public class AbstractDTO {
 		this.modifiedBy = modifiedBy;
 	}
 
+	public Integer getPage() {
+		return page;
+	}
+
+	public void setPage(Integer page) {
+		this.page = page;
+	}
+
+	public Integer getSize() {
+		return size;
+	}
+
+	public void setSize(Integer size) {
+		this.size = size;
+	}
 }

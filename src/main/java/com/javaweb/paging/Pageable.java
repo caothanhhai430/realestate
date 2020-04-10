@@ -1,8 +1,8 @@
 package com.javaweb.paging;
 
 public interface Pageable {
-	Integer getLimit();
+	Integer getSize();
 	Integer getPage();
-	void setLimit(Integer limit);
+	void setSize(Integer size);
 	void setPage(Integer page);
 }

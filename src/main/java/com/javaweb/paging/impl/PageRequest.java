@@ -4,13 +4,13 @@ import com.javaweb.paging.Pageable;
 
 public class PageRequest implements Pageable{
 	private Integer page;
-	private Integer limit;
+	private Integer size;
 
 	
-	public PageRequest(Integer page, Integer limit) {
+	public PageRequest(Integer page, Integer size) {
 		super();
 		this.page = page;
-		this.limit = limit;
+		this.size = size;
 	}
 	
 	public PageRequest() {
@@ -18,9 +18,9 @@ public class PageRequest implements Pageable{
 	}
 
 	@Override
-	public Integer getLimit() {
+	public Integer getSize() {
 		// TODO Auto-generated method stub
-		return this.limit;
+		return this.size;
 	}
 
 	@Override
@@ -35,8 +35,8 @@ public class PageRequest implements Pageable{
 	}
 
 	@Override
-	public void setLimit(Integer limit) {
-		this.limit = limit;
+	public void setSize(Integer size) {
+		this.size = size;
 	}
 
 

@@ -4,34 +4,51 @@ import com.javaweb.annotation.Column;
 import com.javaweb.annotation.Entity;
 import com.javaweb.annotation.Table;
 
+import java.util.HashSet;
+import java.util.Set;
+
+
 @Entity
 @Table(name="customer")
 public class CustomerEntity extends AbstractEntity{
 	
-	@Column(name="id")
+	@Column
 	private Long id;
 
-	@Column(name="name")
+	@Column
 	private String name;
-
-	@Column(name="phone")
+	@Column
 	private String phone;
-
-
-	@Column(name="email")
+	@Column
 	private String email;
-	
-	@Column(name="company")
+	@Column
 	private String company;
-
-	@Column(name="demand")
+	@Column
 	private String demand;
-
-	@Column(name="status")
+	@Column
 	private Byte status;
-	
-	@Column(name="note")
+	@Column
 	private String note;
+
+	Set<UserEntity> staffList=new HashSet<>();
+
+	private Set<TransactionEntity> transactionList=new HashSet<>();
+
+	public void setTransactionList(Set<TransactionEntity> transactionList) {
+		this.transactionList = transactionList;
+	}
+
+	public Set<TransactionEntity> getTransactionList() {
+		return transactionList;
+	}
+
+	public Set<UserEntity> getStaffList() {
+		return staffList;
+	}
+
+	public void setStaffList(Set<UserEntity> staffList) {
+		this.staffList = staffList;
+	}
 
 	public Long getId() {
 		return id;
@@ -96,6 +113,7 @@ public class CustomerEntity extends AbstractEntity{
 	public void setStatus(Byte status) {
 		this.status = status;
 	}
-	
+
+
 	
 }

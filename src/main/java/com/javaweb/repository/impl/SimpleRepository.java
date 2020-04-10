@@ -9,35 +9,30 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.javaweb.JPA.EntityManager;
+import com.javaweb.JPA.EntityManagerFactory;
+import com.javaweb.utils.EntityUtils;
 import org.apache.commons.lang.ArrayUtils;
 
-import com.javaweb.Helper.MapToSqlInsert;
-import com.javaweb.Helper.MapToSqlSearch;
-import com.javaweb.Helper.PageToSqlSearch;
 import com.javaweb.annotation.Column;
 import com.javaweb.annotation.Table;
-import com.javaweb.builder.SqlBuilder;
-import com.javaweb.entity.BuildingEntity;
 import com.javaweb.mapper.impl.ResultSetMapper;
-import com.javaweb.paging.Pageable;
 import com.javaweb.repository.JpaRepository;
 import com.mysql.jdbc.Statement;
 
 public class SimpleRepository<T> implements JpaRepository<T> {
 	private  Class<T> zClass;
-	
+
+	public EntityManager entityManager = EntityManager.getEntityManager();
+
 	@SuppressWarnings("unchecked")
 	SimpleRepository(){
 			Type type = getClass().getGenericSuperclass();
 			ParameterizedType parameterizedType = (ParameterizedType) type;
 			zClass = (Class<T>) parameterizedType.getActualTypeArguments()[0];
-	
-		
 	}	
 	
 	public String getTableName() {
@@ -48,221 +43,63 @@ public class SimpleRepository<T> implements JpaRepository<T> {
 		}
 		return tableName;
 	}
-	
-		
-	@Override
-	public Long save(Object object) {
+
+	public Long execute(Object object, String type){
 		Long id=null;
-		String sql = this.createSQLInsert(object);
+		List<Object> parameters = new ArrayList<>();
+		String sql = "";
 		System.out.println(sql);
-		Connection connection = EntityManagerFactory.getConnection();
-		PreparedStatement statement = null;
-		
-		if(connection != null) {
-			try {
-				statement = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-				connection.setAutoCommit(false);
-				Class<?> aClass = object.getClass();
-				int index = 1;
-				while(aClass!=null) {
-					Field[] fields = aClass.getDeclaredFields();
-					for(int i=0;i<fields.length;i++) {					
-						Field field = fields[i];
-						field.setAccessible(true);
-						Object obj = field.get(object);
-						if(obj!=null ) {	
-							statement.setObject(index, obj);
-							index += 1;
-						}
-					}
-					aClass = aClass.getSuperclass();
-				}
-				
-				
-				
-				statement.executeUpdate();
-				ResultSet rs = statement.getGeneratedKeys();
-				
-				if (rs.next()){
-				    id=rs.getLong(1);
-				}
-				connection.commit();
-				
-			} catch (SQLException | IllegalArgumentException | IllegalAccessException e) {
-				try {
-					connection.rollback();
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
-				e.printStackTrace();
-			}finally {
-						try {
-							if(connection!=null) {
-							connection.close();
-							}
-							if(statement != null) {
-								statement.close();
-							}
-						}
-						 catch (SQLException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-							
-						}
-					}
-				
+
+		switch (type){
+			case "SAVE":
+				sql = this.createSQLInsert(object,parameters);
+				break;
+			case "UPDATE":
+				sql = this.createSQLUpdate(object,parameters);
+				break;
 		}
-		
 
-		
+		ResultSet resultSet = entityManager.createExecuteQuery(sql,parameters);
+		try {
+			if (resultSet.next()){
+				id=resultSet.getLong(1);
+				resultSet.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return id;
-
 	}
 
-	
+
 	@Override
 	public Long update(Object object) {
-		Long id=null;
-		String sql = this.createSQLUpdate(object);
-		System.out.println(sql);
-		Connection connection = EntityManagerFactory.getConnection();
-		PreparedStatement statement = null;
-		
-		if(connection != null) {
-			try {
-				statement = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-				connection.setAutoCommit(false);
-				Class<?> aClass = object.getClass();
-				int index = 1;
-				while(aClass!=null) {
-					Field[] fields = aClass.getDeclaredFields();
-					for(int i=0;i<fields.length;i++) {					
-						Field field = fields[i];
-						field.setAccessible(true);
-						Object obj = field.get(object);
-						if(obj!=null) {
-							if(field.getName().equals("id")) {
-								id = (Long) obj;
-							}else {
-								statement.setObject(index, obj);
-								index += 1;
-							}
-						}
-					}
-					aClass = aClass.getSuperclass();
-				}
-				if(id!=null) {
-					statement.setObject(index, id);
-				}
-				
-				
-				
-				statement.executeUpdate();
-				ResultSet rs = statement.getGeneratedKeys();
-				
-				if (rs.next()){
-				    id=rs.getLong(1);
-				}
-				connection.commit();
-				
-			} catch (SQLException | IllegalArgumentException | IllegalAccessException e) {
-				try {
-					connection.rollback();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				e.printStackTrace();
-			}finally {
-						try {
-							if(connection!=null) {
-							connection.close();
-							}
-							if(statement != null) {
-								statement.close();
-							}
-						}
-						 catch (SQLException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-							
-						}
-					}
-				
-		}
-		
-
-		
-		return id;
-
+		return execute(object,"UPDATE");
+	}
+	@Override
+	public Long save(Object object) {
+		return execute(object,"SAVE");
 	}
 
-	
-	private String createSQLInsert(Object obj) {
-		StringBuilder fields = new StringBuilder("");
-		StringBuilder params = new StringBuilder("");
-		Class<?> aClass = zClass;
-		while(aClass!=null) {
-		for(Field field : aClass.getDeclaredFields()) {
-				field.setAccessible(true);
-				try {
-					if(field.get(obj)==null) {
-						continue;
-					}
-				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				if(fields.length()>0) {
-					fields.append(",");
-					params.append(",");
-				}
-				if(field.isAnnotationPresent(Column.class)) {
-					Column column = field.getAnnotation(Column.class);
-					fields.append(column.name());
-					params.append("?");
-				}
-			}
-			aClass = aClass.getSuperclass();
+
+	@Override
+	public List<Long> save(List<T> list) {
+		List<Long> ids = new ArrayList<>();
+		for (T obj: list) {
+			Long id = this.save(obj);
+			ids.add(id);
 		}
-		String sql = "INSERT INTO " + this.getTableName() + " (" + fields.toString() + ")"
-				+ " VALUES(" + params.toString() + ")";
-		return sql;
+		return ids;
+	}
 	
+	private String createSQLInsert(Object obj, List<Object> parameters) {
+		String sql = "INSERT INTO " + getTableName() + " " + EntityUtils.toInsertSql(obj,parameters);
+		return  sql;
 	}
 
-	
-	
-	private String createSQLUpdate(Object obj) {
-		StringBuilder params = new StringBuilder("");
-		Class<?> aClass = zClass;
-		while(aClass!=null) {
-		for(Field field : aClass.getDeclaredFields()) {
-				field.setAccessible(true);
-				try {
-					if(field.get(obj)==null || field.getName().equals("id")) {
-						continue;
-					}
-				} catch (IllegalArgumentException|IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				if(params.length()>0) {
-					params.append(", ");
-				}
-				if(field.isAnnotationPresent(Column.class)) {
-					Column column = field.getAnnotation(Column.class);
-					params.append(column.name()+"=?");
-				}
-			}
-			aClass = aClass.getSuperclass();
-		}
-		String sql = "UPDATE " + this.getTableName() + " SET "+ params.toString() + " WHERE id=?";
+	private String createSQLUpdate(Object obj, List<Object> parameters) {
+		String sql = "UPDATE " + this.getTableName() + " SET "+ EntityUtils.createUpdateSql(obj,parameters) + " WHERE id=?";
 		return sql;
-	
 	}
 
 	
@@ -278,93 +115,51 @@ public class SimpleRepository<T> implements JpaRepository<T> {
 	public List<T> findAll(String sql) {
 		System.out.println(sql);
 		List<T> results = new ArrayList<>();
-		Connection connection = EntityManagerFactory.getConnection();
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
-		if(connection != null) {
+		ResultSet resultSet = entityManager.createQuery(sql,new ArrayList<>());
+		results = new ResultSetMapper<T>().rowMapper(resultSet, zClass);
+		if(resultSet!=null) {
 			try {
-				statement = connection.prepareStatement(sql.toString());
-				resultSet = statement.executeQuery();
-				results = new ResultSetMapper<T>().rowMapper(resultSet, zClass);
-				
+				resultSet.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
-			}finally {
-						try {
-							if(connection!=null) {
-							connection.close();
-							}
-							if(statement != null) {
-								statement.close();
-							}
-							if(resultSet != null) {
-								resultSet.close();
-							}
-						}
-						 catch (SQLException e) {
-							e.printStackTrace();
-							return null;
-						}
-					}
-				
+			}
 		}
-		
 		return results;
-
 	}
 
 	@Override
-	public void delete(long[] id) {
-		if(id.length<1) return;
-		Long [] ids = ArrayUtils.toObject(id);
-		String arrId = 	Arrays.stream(ids).map(i -> String.valueOf(i)).collect(Collectors.joining(","));
+	public void delete(List<Long> ids) {
+		if(ids.size()<1) return;
+		String arrId = 	ids.stream().map(i -> String.valueOf(i)).collect(Collectors.joining(","));
 		String sql = "DELETE FROM " + getTableName() + " WHERE id IN (" + arrId + ")";
 		System.out.println(sql);
-		Connection connection = EntityManagerFactory.getConnection();
-		PreparedStatement statement = null;
-		
-		if(connection != null) {
-			try {
-				statement = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-				connection.setAutoCommit(false);
-				
-				statement.executeUpdate();
-				connection.commit();
-				
-			} catch (SQLException | IllegalArgumentException e) {
-				try {
-					connection.rollback();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				e.printStackTrace();
-			}finally {
-						try {
-							if(connection!=null) {
-							connection.close();
-							}
-							if(statement != null) {
-								statement.close();
-							}
-						}
-						 catch (SQLException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-							
-						}
-					}
-				
+		ResultSet resultSet = entityManager.createExecuteQuery(sql,new ArrayList<>());
+		try {
+			resultSet.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		
-
-		
 	}
 
 	@Override
 	public void delete(long id) {
-		long ids[] = {id}; 
+		List<Long> ids = new ArrayList<>();
+		ids.add(id);
 		this.delete(ids);
 	}
 
+	@Override
+	public long count(String sql) {
+		System.out.println(sql);
+		long result = 0;
+		ResultSet resultSet = entityManager.createQuery(sql,new ArrayList<>());
+		try {
+			if(resultSet.next()){
+				result = resultSet.getLong(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

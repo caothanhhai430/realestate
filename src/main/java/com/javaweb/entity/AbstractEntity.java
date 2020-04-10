@@ -1,22 +1,23 @@
 package com.javaweb.entity;
 
-import java.sql.Timestamp;
-
 import com.javaweb.annotation.Column;
 
-public class AbstractEntity {
-	
+import java.sql.Timestamp;
+
+public abstract class AbstractEntity {
+
 	@Column(name="createddate")
 	protected Timestamp createdDate;
-	
+
 	@Column(name="createdby")
 	protected String createdBy;
-	
+
 	@Column(name="modifieddate")
 	protected Timestamp modifiedDate; 
-	
+
 	@Column(name="modifiedby")
 	protected String modifiedBy;
+
 
 	public Timestamp getCreatedDate() {
 		return createdDate;
@@ -49,6 +50,4 @@ public class AbstractEntity {
 	public void setModifiedBy(String modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
-
-
 }

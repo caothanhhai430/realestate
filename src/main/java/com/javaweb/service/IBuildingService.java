@@ -7,7 +7,10 @@ import com.javaweb.dto.BuildingDTO;
 import com.javaweb.paging.Pageable;
 
 public interface IBuildingService {
-	public List<BuildingDTO> findAll(BuildingDTO dto,Pageable pageable);
-	public BuildingDTO findById(long id);
-	public Long save(BuildingDTO building);
+	List<BuildingDTO> findAll(BuildingDTO dto,Pageable pageable);
+	BuildingDTO findById(long id);
+	Long save(BuildingDTO building);
+	Long count(BuildingDTO building);
+	Long update(BuildingDTO building);
+	boolean delete(List<Long> ids);
 }

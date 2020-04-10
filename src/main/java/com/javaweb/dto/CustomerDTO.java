@@ -1,5 +1,9 @@
 package com.javaweb.dto;
 
+import com.javaweb.entity.TransactionEntity;
+
+import java.util.Set;
+
 public class CustomerDTO extends AbstractDTO{
 	
 	private Long id;
@@ -12,7 +16,18 @@ public class CustomerDTO extends AbstractDTO{
 	private Byte status;
 	private Long staffId;
 	private long[] ids;
-	
+
+
+	private Set<TransactionDTO> transactionList;
+
+	public void setTransactionList(Set<TransactionDTO> transactionList) {
+		this.transactionList = transactionList;
+	}
+
+	public Set<TransactionDTO> getTransactionList() {
+		return transactionList;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -73,5 +88,5 @@ public class CustomerDTO extends AbstractDTO{
 	public void setIds(long[] ids) {
 		this.ids = ids;
 	}
-	
+
 }
