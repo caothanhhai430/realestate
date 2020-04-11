@@ -1,74 +1,61 @@
 package com.javaweb.mapper.impl;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.beanutils.BeanUtils;
-
-import com.javaweb.annotation.Column;
+import com.javaweb.JPA.EntityManager;
 import com.javaweb.annotation.Entity;
 import com.javaweb.mapper.RowMapper;
+import com.javaweb.utils.EntityUtils;
+import org.apache.commons.beanutils.BeanUtils;
 
-public class ResultSetMapper<T> implements RowMapper<T>{
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-	@Override
-	public T rowMapper(ResultSet resultSet) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+public class ResultSetMapper<T> implements RowMapper<T> {
 
 	@Override
 	public List<T> rowMapper(ResultSet resultSet, Class<T> zClass) {
 		List<T> results = new ArrayList<T>();
-		
-			try {
-				if(zClass.isAnnotationPresent(Entity.class)) {
-					ResultSetMetaData rs = resultSet.getMetaData();
-					
-					
-					while(resultSet.next()) {
-						Object object = zClass.newInstance();
-						for(int i=0;i<rs.getColumnCount();i++) {
-							String columnName = rs.getColumnName(i+1);
-							Object columnValue = resultSet.getObject(i+1);
-							try {
-								Class<?> cl = zClass;
-								
-								while(cl!=null) {	
-									Field[] fields = cl.getDeclaredFields();
-									for(Field field : fields) {
-										if(field.isAnnotationPresent(Column.class)) {
-											Column column = field.getAnnotation(Column.class);
-											if(column.name().equals(columnName) && columnValue!=null) {
-												BeanUtils.setProperty(object, field.getName(), columnValue);
-												break;
-											}
-										}
-									}
-									cl = cl.getSuperclass();
-									
-								}
-							} catch (IllegalAccessException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-							
-						}
-						results.add((T) object);
+		Map<String, String> mapColumnName = EntityUtils.getMapColumnName(zClass);
+		try {
+			if (zClass.isAnnotationPresent(Entity.class)) {
+				ResultSetMetaData rs = resultSet.getMetaData();
+				Map<String, Object> rsHashMap = new HashMap<>();
+				while (resultSet.next()) {
+					for (int i = 1; i <= rs.getColumnCount(); i++) {
+						rsHashMap.put(mapColumnName.get(rs.getColumnName(i)), resultSet.getObject(i));
 					}
+					Object entity = zClass.newInstance();
+					BeanUtils.populate(entity, rsHashMap);
+					results.add((T) entity);
+					rsHashMap.clear();
 				}
-			} catch (SQLException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
-		
-		// TODO Auto-generated method stub
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return results;
 	}
 
+	@Override
+	public List<Map<String, Object>> getMap(ResultSet resultSet, Class<T> zClass) {
+		List<Map<String, Object>> results = new ArrayList<>();
+		try {
+			ResultSetMetaData rs = resultSet.getMetaData();
+			while (resultSet.next()) {
+				Map<String, Object> rsHashMap = new HashMap<>();
+				for (int i = 1; i <= rs.getColumnCount(); i++) {
+					rsHashMap.put(rs.getColumnName(i), resultSet.getObject(i));
+				}
+				results.add(rsHashMap);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
+		return results;
+	}
 }

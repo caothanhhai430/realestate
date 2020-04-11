@@ -12,22 +12,21 @@ import java.util.Set;
 @Table(name="customer")
 public class CustomerEntity extends AbstractEntity{
 	
-	@Column
+	@Column(name="id")
 	private Long id;
-
-	@Column
+	@Column(name="name")
 	private String name;
-	@Column
+	@Column(name="phone")
 	private String phone;
-	@Column
+	@Column(name="email")
 	private String email;
-	@Column
+	@Column(name="company")
 	private String company;
-	@Column
+	@Column(name="demand")
 	private String demand;
-	@Column
+	@Column(name="status")
 	private Byte status;
-	@Column
+	@Column(name="note")
 	private String note;
 
 	Set<UserEntity> staffList=new HashSet<>();

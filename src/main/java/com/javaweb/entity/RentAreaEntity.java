@@ -35,7 +35,6 @@ public class RentAreaEntity extends AbstractEntity{
 		this.value = value;
 	}
 
-
 	public Long getId() {
 		return id;
 	}

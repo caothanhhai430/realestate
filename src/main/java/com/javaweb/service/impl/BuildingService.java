@@ -9,6 +9,7 @@ import com.javaweb.entity.RentAreaEntity;
 import com.javaweb.paging.Pageable;
 import com.javaweb.repository.impl.BuildingRepository;
 import com.javaweb.repository.impl.RentAreaRepository;
+import com.javaweb.repository.impl.UserRepository;
 import com.javaweb.service.IBuildingService;
 import com.javaweb.utils.EntityUtils;
 import org.apache.commons.lang.StringUtils;
@@ -29,6 +30,8 @@ public class BuildingService implements IBuildingService{
 	@Inject
 	private RentAreaRepository rentAreaRepository;
 
+	@Inject
+	private UserRepository userRepository;
 
 	@Override
 	public List<BuildingDTO> findAll(BuildingDTO dto, Pageable pageable) {
@@ -66,6 +69,7 @@ public class BuildingService implements IBuildingService{
 	@Transactional
 	public Long save(BuildingDTO building) {
 		BuildingEntity entity = EntityUtils.toModel(building, BuildingEntity.class);
+		entity.setType(building.getBuildingTypeString());
 		try {
 			Long id = repository.save(entity);
 			List<RentAreaEntity> rentAreaEntityList = toRentAreaList(building.getRentArea(),id);
@@ -107,17 +111,13 @@ public class BuildingService implements IBuildingService{
 	@Override
 	@Transactional
 	public Long update(BuildingDTO building) {
-		deleteRentAreaByBuildingId(building.getId());
+		rentAreaRepository.deleteByBuildingId(building.getId());
 		List<RentAreaEntity> rentAreaEntityListNew = toRentAreaList(building.getRentArea(),building.getId());
 		rentAreaRepository.save(rentAreaEntityListNew);
 		BuildingEntity entity = EntityUtils.toModel(building,BuildingEntity.class);
+		entity.setType(building.getBuildingTypeString());
 		repository.update(entity);
 		return building.getId();
-	}
-	private void deleteRentAreaByBuildingId(Long id){
-		List<RentAreaEntity> rentAreaEntityList = rentAreaRepository.findByBuildingId(id);
-		List<Long> ids = rentAreaEntityList.stream().map(e-> e.getId()).collect(Collectors.toList());
-		rentAreaRepository.delete(ids);
 	}
 
 
@@ -125,8 +125,8 @@ public class BuildingService implements IBuildingService{
 	@Transactional
 	public boolean delete(List<Long> ids) {
 		try{
-			ids.stream().forEach(e-> deleteRentAreaByBuildingId(e));
-			repository.deleteAssignmentStaffByBuildingId(ids);
+			ids.stream().forEach(e-> rentAreaRepository.deleteByBuildingId(e));
+			userRepository.deleteAssignmentStaffByBuildingId(ids);
 			repository.delete(ids);
 			return true;
 		}catch (Exception e){

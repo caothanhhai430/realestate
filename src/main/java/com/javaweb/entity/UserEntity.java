@@ -13,19 +13,20 @@ import java.util.Set;
 @Table(name="user")
 public class UserEntity extends AbstractEntity{
 
+	@Column(name="id")
 	private Long id;
-	@Column
+	@Column(name="fullname")
 	private String fullname;
-	@Column
+	@Column(name="status")
 	private Integer status;
 
-	@Column
+	@Column(name="username")
 	private String username;
-	@Column
+	@Column(name="password")
 	private String password;
-	@Column
+	@Column(name="avatar")
 	private String avatar;
-	@Column
+	@Column(name="phone")
 	private String phone;
 
 	List<BuildingEntity> buildingList=new ArrayList<>();

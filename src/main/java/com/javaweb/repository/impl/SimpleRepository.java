@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import com.javaweb.JPA.EntityManager;
 import com.javaweb.JPA.EntityManagerFactory;
+import com.javaweb.entity.BuildingEntity;
 import com.javaweb.utils.EntityUtils;
 import org.apache.commons.lang.ArrayUtils;
 
@@ -48,7 +49,7 @@ public class SimpleRepository<T> implements JpaRepository<T> {
 		Long id=null;
 		List<Object> parameters = new ArrayList<>();
 		String sql = "";
-		System.out.println(sql);
+		
 
 		switch (type){
 			case "SAVE":
@@ -107,33 +108,30 @@ public class SimpleRepository<T> implements JpaRepository<T> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public T findById(long id) {
-		String sql = "SELECT * FROM " + getTableName() + " WHERE id="+ id;
-		return findAll(sql).get(0);
+		String sql = "SELECT * FROM " + getTableName() + " WHERE id=?";
+		return findAll(sql,Arrays.asList(id)).get(0);
 	}
 	
 	@Override
 	public List<T> findAll(String sql) {
-		System.out.println(sql);
 		List<T> results = new ArrayList<>();
-		ResultSet resultSet = entityManager.createQuery(sql,new ArrayList<>());
-		results = new ResultSetMapper<T>().rowMapper(resultSet, zClass);
-		if(resultSet!=null) {
-			try {
-				resultSet.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
+		ResultSet resultSet = entityManager.createQuery(sql).getResultSet();
+		results = (List<T>) entityManager.createQuery(sql).getResultList(zClass);
+		return results;
+	}
+
+	@Override
+	public List<T> findAll(String sql, List<Object> parameters) {
+		List<T> results = (List<T>) entityManager.createQuery(sql,parameters).getResultList(zClass);
 		return results;
 	}
 
 	@Override
 	public void delete(List<Long> ids) {
 		if(ids.size()<1) return;
-		String arrId = 	ids.stream().map(i -> String.valueOf(i)).collect(Collectors.joining(","));
+		String arrId = 	ids.stream().map(i -> "?").collect(Collectors.joining(","));
 		String sql = "DELETE FROM " + getTableName() + " WHERE id IN (" + arrId + ")";
-		System.out.println(sql);
-		ResultSet resultSet = entityManager.createExecuteQuery(sql,new ArrayList<>());
+		ResultSet resultSet = entityManager.createExecuteQuery(sql,new ArrayList<>(ids));
 		try {
 			resultSet.close();
 		} catch (SQLException e) {
@@ -150,9 +148,24 @@ public class SimpleRepository<T> implements JpaRepository<T> {
 
 	@Override
 	public long count(String sql) {
-		System.out.println(sql);
+		
 		long result = 0;
-		ResultSet resultSet = entityManager.createQuery(sql,new ArrayList<>());
+		ResultSet resultSet = entityManager.createQuery(sql).getResultSet();
+		try {
+			if(resultSet.next()){
+				result = resultSet.getLong(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	@Override
+	public long count(String sql, List<Object> parameters) {
+
+		long result = 0;
+		ResultSet resultSet = entityManager.createQuery(sql,parameters).getResultSet();
 		try {
 			if(resultSet.next()){
 				result = resultSet.getLong(1);

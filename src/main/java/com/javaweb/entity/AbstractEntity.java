@@ -3,6 +3,7 @@ package com.javaweb.entity;
 import com.javaweb.annotation.Column;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public abstract class AbstractEntity {
 
@@ -49,5 +50,12 @@ public abstract class AbstractEntity {
 
 	public void setModifiedBy(String modifiedBy) {
 		this.modifiedBy = modifiedBy;
+	}
+
+	public AbstractEntity(){
+		this.createdDate = Timestamp.valueOf(LocalDateTime.now());
+		this.modifiedDate = Timestamp.valueOf(LocalDateTime.now());
+		this.createdBy = "ADMIN";
+		this.modifiedBy = "ADMIN";
 	}
 }

@@ -133,10 +133,9 @@ public class BuildingAPI extends HttpServlet{
 		ObjectMapper obj = new ObjectMapper();
 		req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
-		String ids = req.getReader().lines().collect(Collectors.joining()).replaceAll(" ","").split(":")[1];
-		ids = ids.substring(1,ids.length()-2);
-		String[] arr = ids.replaceAll("\\s+", "").split(",");
-		List<Long> arrIds = Arrays.asList(arr).stream().map(e-> Long.valueOf(e)).collect(Collectors.toList());
+		Map<String,Object> map = obj.readValue(req.getReader().lines().collect(Collectors.joining()),Map.class);
+		List<Integer> list = (List<Integer>) map.get("ids");
+		List<Long> arrIds = list.stream().map(e-> e.longValue()).collect(Collectors.toList());
 		boolean res = service.delete(arrIds);
 		obj.writeValue(resp.getOutputStream(), res);
 	}

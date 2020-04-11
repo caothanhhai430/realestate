@@ -6,12 +6,13 @@
   </div>
   <div class="img bg-wrap text-center py-4" style="background-image: url(/common/template/sidebar/images/bg_1.jpg);">
     <div class="user-logo">
-      <div id="image-sidebar" class="img" style="background-image: url(/common/template/sidebar/images/logo.jpg);"></div>
+      <div id="image-sidebar" class="img" style="background-image: url(/common/template/sidebar/images/user.png);"></div>
       
       <h3 id="fullname-sidebar">
+        Cao Thanh Hai
       </h3>
       <span style="font-family:'sans-serif';font-size: 15px;height: 22px;" class="pro-label label label-warning">
-        
+        Quản trị viên
     </span>
     </div>
   </div>
@@ -23,10 +24,10 @@
       <a href='<c:url value="/admin/customer" /> '><span class="fa fa-users mr-3"></span> Quản lý khách hàng</a>
     </li>
       <li id="act-user">
-        <a href='<c:url value="/admin/user" /> '><span class="fa fa-male mr-3"></span> Quản lý người dùng</a>
+        <a href='#'><span class="fa fa-male mr-3"></span> Quản lý người dùng</a>
       </li>
     <li id="act-profile">
-      <a href='<c:url value="/admin/profile" /> '><span class="fa fa-cogs mr-3"></span> Quản lý tài khoản</a>
+      <a href='#'><span class="fa fa-cogs mr-3"></span> Quản lý tài khoản</a>
     </li>
     <li id="act-logout">
       <a href="#"><span class="fa fa-sign-out mr-3"></span> Đăng xuất</a>

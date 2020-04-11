@@ -10,12 +10,12 @@ import org.aspectj.lang.annotation.Before;
 public class TransactionalAOP {
 
     @Before("execution(@com.javaweb.annotation.Transactional * *.*(..))")
-    public void hello(JoinPoint joinPoint){
+    public void beforeTransaction(JoinPoint joinPoint){
         System.out.println(joinPoint.toString());
         EntityManager.getEntityManager().beginTransaction();
     }
     @After("execution(@com.javaweb.annotation.Transactional * *.*(..))")
-    public void hello2(JoinPoint joinPoint){
+    public void afterTransaction(JoinPoint joinPoint){
         System.out.println(joinPoint.toString());
         EntityManager.getEntityManager().handleTransaction();
     }

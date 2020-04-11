@@ -8,7 +8,7 @@ public class EntityManagerFactory {
 	private static Connection getConnection() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://localhost:3306/estatejdbc82019?characterEncoding=utf8";
+			String url = "jdbc:mysql://localhost:3306/estate_springmvc82019?characterEncoding=utf8";
 			String user = "root";
 			String password = "Messi3069";
 			return DriverManager.getConnection(url, user, password);

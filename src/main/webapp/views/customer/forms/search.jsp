@@ -41,7 +41,6 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-4">
-                            <sec:authorize access="hasAuthority('ADMIN')">
                                 <label for="form-field-8">Nhân viên vụ trách</label>
 
                                 <select class="form-control" name="staffId">
@@ -50,12 +49,7 @@
                                         <option value="${item.id}">${item.fullname}</option>
                                     </c:forEach>
                                     <select>
-                            </sec:authorize>
-                            <sec:authorize access="hasAuthority('STAFF')">
-                                <input type="hidden" class="form-control" name="staffId" value=<sec:authentication
-                                    property="principal.id" />>
-                            </sec:authorize>
-
+                        
                         </div>
 
                     </div>

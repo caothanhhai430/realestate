@@ -7,6 +7,7 @@ import com.javaweb.paging.Pageable;
 
 public interface JpaRepository<T> {
 	List<T> findAll(String sql);
+	List<T> findAll(String sql, List<Object> parameters);
 	T findById(long id);
 	 Long save(T object);
 	 List<Long> save(List<T> object);
@@ -14,4 +15,5 @@ public interface JpaRepository<T> {
 	 void delete(List<Long> id);
 	 void delete(long id);
 	 long count(String sql);
+	long count(String sql, List<Object> parameters);
 }

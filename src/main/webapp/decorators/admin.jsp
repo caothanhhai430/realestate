@@ -14,7 +14,7 @@
 	<div class="wrapper d-flex align-items-stretch">
 		<%@ include file="/common/web-components/sidebar.jsp" %>
 
-		<div style="max-width: 80%;min-width: 80%;">
+		<div style="max-width: 100%;min-width: 80%;">
 			<div class="breadcrumbs" id="breadcrumbs">
 				<button type="button" id="sb-collapse" class="btn btn-primary">
 					<i id="collapse-arrow" class="fa fa-arrow-left"></i>

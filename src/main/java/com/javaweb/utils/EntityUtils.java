@@ -2,6 +2,7 @@ package com.javaweb.utils;
 
 import com.javaweb.annotation.Column;
 import com.javaweb.paging.Pageable;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.modelmapper.ModelMapper;
 
@@ -42,7 +43,7 @@ public class EntityUtils {
             }
             aClass = aClass.getSuperclass();
         }
-        String sql =  " (" + fields.toString() + ")" + " VALUES(" + params.toString() + ")";
+        String sql =  "(" + fields.toString() + ")" + " VALUES(" + params.toString() + ")";
         return sql;
 
     }
@@ -81,7 +82,7 @@ public class EntityUtils {
     }
 
 
-    public static String toQuerySql(Map<String,Object> map,String prefix) {
+    public static String toQuerySql(Map<String,Object> map,String prefix, List<Object> parameters) {
         StringBuilder where = new StringBuilder();
         if(map==null) return "";
         Set<String> set = map.keySet();
@@ -89,9 +90,11 @@ public class EntityUtils {
             Object obj = map.get(key);
 
             if(obj instanceof String) {
-                where.append(" AND "+ prefix+"."+key +" LIKE '%"+ obj + "%'");
+                where.append(" AND "+ prefix+"."+key +" LIKE ?");
+                parameters.add("%" + obj + "%");
             }else if(obj instanceof Integer || obj instanceof Long ) {
-                where.append(" AND "+ prefix+"." + key +"="+ String.valueOf(obj));
+                where.append(" AND "+ prefix+"." + key + " = ?");
+                parameters.add(obj);
             }
         }
         return where.toString();
@@ -122,12 +125,12 @@ public class EntityUtils {
         return map;
     }
 
-    public static String toPaginaitonSql(Pageable pageable) {
+    public static String toPaginaitonSql(Pageable pageable,List<Object> parameters) {
         StringBuilder where = new StringBuilder();
-
         if(pageable!=null && pageable.getPage()!=null && pageable.getSize()!=null) {
-            where.append("LIMIT ");
-            where.append(((pageable.getPage()-1)*pageable.getSize())+","+pageable.getSize());
+            where.append("LIMIT ?,?");
+            parameters.add((pageable.getPage()-1)*pageable.getSize());
+            parameters.add(pageable.getSize());
         }
 
         return where.toString();
@@ -138,4 +141,21 @@ public class EntityUtils {
         return (T) modelMapper.map(obj,zClass);
 
     }
+
+    public static Map<String,String> getMapColumnName(Class zClass) {
+        Class cl = zClass;
+        Map<String, String> map = new HashMap<>();
+        while (cl != Object.class) {
+            Field[] fields = cl.getDeclaredFields();
+            for (Field field : fields) {
+                if (field.isAnnotationPresent(Column.class)) {
+                    Column column = field.getAnnotation(Column.class);
+                    map.put(column.name(), field.getName());
+                }
+            }
+            cl = cl.getSuperclass();
+        }
+        return map;
+    }
+
 }

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.javaweb.dto.BuildingDTO;
 import com.javaweb.paging.impl.PageRequest;
 import com.javaweb.service.IBuildingService;
+import com.javaweb.service.IUserService;
 import com.javaweb.service.impl.BuildingService;
 import com.javaweb.utils.EnumUtils;
 import com.javaweb.utils.FormUtils;
@@ -23,29 +24,22 @@ import com.javaweb.utils.FormUtils;
 @WebServlet(urlPatterns = {"/admin/building"})
 public class BuildingController extends HttpServlet{
 
-	/**
-	 * 
-	 */
-
 	@Inject
 	private IBuildingService service;
+
+	@Inject
+	private IUserService userService;
 
 	private static final long serialVersionUID = -4303714809779015402L;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		req.setCharacterEncoding("UTF-8");
-		
-//		BuildingService service = new BuildingService();
-		PageRequest PageRequest = FormUtils.toModel(PageRequest.class, req);
-		BuildingDTO buildRequest = FormUtils.toModel(BuildingDTO.class, req);
-
-		List<BuildingDTO> results = service.findAll(buildRequest,PageRequest);
 		Map<String,String> districtsMap = EnumUtils.getDistricts();
 		Map<String,String> buildingTypesMap = EnumUtils.getBuildingTypes();
+		List<Map<String,Object>> listActiveStaff = userService.findAllActiveStaff();
+		req.setAttribute("staffMap",listActiveStaff);
 		req.setAttribute("districtsMap",districtsMap);
 		req.setAttribute("buildingTypesMap",buildingTypesMap);
-		req.setAttribute("buildingList", results);
 		RequestDispatcher rd = req.getRequestDispatcher("/views/building/buildinglist.jsp");
 		rd.forward(req, resp);
 	}

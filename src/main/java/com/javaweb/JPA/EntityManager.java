@@ -1,11 +1,13 @@
 package com.javaweb.JPA;
 
+import com.javaweb.Exception.TransactionFailedException;
 import com.mysql.jdbc.Statement;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EntityManager {
@@ -32,6 +34,7 @@ public class EntityManager {
     }
 
     public void handleTransaction(){
+        System.out.println("AFTER TRANSACTION");
         if(isOpenedTransacton &&  !willRollback){
             commit();
         }else rollback();
@@ -62,9 +65,12 @@ public class EntityManager {
     }
     public void commit(){
         try {
+            System.out.println("RUNNING COMMIT");
             connection.commit();
             connection.setAutoCommit(true);
             System.out.println("COMMIT SUCCESSFUL   ");
+            isOpenedTransacton = false;
+            willRollback = false;
         } catch (SQLException e) {
             System.out.println("COMMIT FAILED");
             rollback();
@@ -74,6 +80,7 @@ public class EntityManager {
 
     public void rollback(){
         try {
+            System.out.println("RUNNING ROLLBACK");
             connection.rollback();
             isOpenedTransacton = false;
             willRollback = false;
@@ -81,6 +88,8 @@ public class EntityManager {
         } catch (SQLException e) {
             System.out.println("ROLLBACK FAILED");
             e.printStackTrace();
+        }finally {
+            throw new TransactionFailedException();
         }
     }
 
@@ -93,7 +102,8 @@ public class EntityManager {
     }
 
 
-    public ResultSet createQuery(String query,List<Object> parameters,String type){
+    private ResultSet createQuery(String query,List<Object> parameters,String type){
+        System.out.println(query);
         Connection connection = entityManager.getConnection();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -128,8 +138,17 @@ public class EntityManager {
     public ResultSet createExecuteQuery(String query, List<Object> parameters){
         return createQuery(query,parameters,"EXECUTE_UPDATE");
     }
-    public ResultSet createQuery(String query, List<Object> parameters){
-        return createQuery(query,parameters,"EXECUTE_QUERY");
+
+    public ResultSet createExecuteQuery(String query){
+        return this.createExecuteQuery(query,new ArrayList<>());
+    }
+    public ResultSetData createQuery(String query, List<Object> parameters){
+        ResultSet resultSet = createQuery(query,parameters,"EXECUTE_QUERY");
+        return ResultSetData.of(resultSet);
+    }
+    public ResultSetData createQuery(String query){
+        return this.createQuery(query,new ArrayList<>());
     }
 }
+
 

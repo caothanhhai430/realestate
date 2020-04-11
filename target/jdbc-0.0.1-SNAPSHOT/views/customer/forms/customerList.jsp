@@ -6,8 +6,7 @@
     <div style="display:inline-block;width:100%;">
         <h2 style="display:inline-block;" class="bigger lighter blue">Danh sách tòa nhà</h2>
         <div class="pull-right tableTools-container">
-            <sec:authorize access="hasAuthority('ADMIN')">
-
+           
                 <div class="btn-group btn-overlap">
                     <div class="ColVis btn-group" title="" data-original-title="Show/hide columns">
                         <button id="btn_add_customer" data-toggle="modal" data-target="#myModal"
@@ -18,8 +17,7 @@
                             <i class="fa fa-trash bigger-110 grey"></i></span></a>
                 </div>
         </div>
-        </sec:authorize>
-
+        
     </div>
 
     <div class="table-header">

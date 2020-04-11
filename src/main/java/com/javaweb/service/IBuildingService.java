@@ -1,6 +1,7 @@
 package com.javaweb.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.javaweb.builder.BuildingSearchBuilder;
 import com.javaweb.dto.BuildingDTO;
@@ -13,4 +14,5 @@ public interface IBuildingService {
 	Long count(BuildingDTO building);
 	Long update(BuildingDTO building);
 	boolean delete(List<Long> ids);
+
 }

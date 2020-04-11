@@ -11,21 +11,22 @@ import java.util.Set;
 @Table(name="transaction")
 public class TransactionEntity extends AbstractEntity{
 
-	@Column
+	@Column(name="id")
 	private Long id;
-	@Column
+	@Column(name="note")
 	private String note;
-	@Column
+	@Column(name="type")
 	private Integer type;
 
-	private CustomerEntity customer;
+	@Column(name="customerid")
+	private Long customerId;
 
-	public void setCustomer(CustomerEntity customer) {
-		this.customer = customer;
+	public Long getCustomerid() {
+		return customerId;
 	}
 
-	public CustomerEntity getCustomer() {
-		return customer;
+	public void setCustomerid(Long customerid) {
+		this.customerId = customerid;
 	}
 
 	public void setNote(String note) {

@@ -6,6 +6,12 @@ var currentTourLoadMoreIndex = 1;
 
 $(document).ready(function () {
 
+
+
+  function normalizeData(data){
+    return data==null ? '' : data;
+  }
+
   const customerToTableRowHTML = (customer) => {
     return `<td class="center">
         <label class="pos-rel">
@@ -14,12 +20,12 @@ $(document).ready(function () {
         </label>
     </td>
     <td>
-        <a href="#">${customer.name}</a>
+        <a href="#">${normalizeData(customer.name)}</a>
     </td>
-    <td>${customer.phone}</td>
-    <td>${customer.email}</td>
-    <td>${customer.demand}</td>
-    <td>${customer.createdBy}</td>
+    <td>${normalizeData(customer.phone)}</td>
+    <td>${normalizeData(customer.email)}</td>
+    <td>${normalizeData(customer.demand)}</td>
+    <td>${normalizeData(customer.createdBy)}</td>
     <td>${timeConverter(customer.createdDate)}</td>
     <td>Đang xử lý</td>
     <td>
@@ -55,7 +61,7 @@ $(document).ready(function () {
     var a = new Date(UNIX_timestamp);
     // var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     var year = a.getFullYear();
-    var month = a.getMonth();
+    var month = a.getMonth() + 1;
     var date = a.getDate();
     var hour = a.getHours();
     var min = a.getMinutes();
@@ -101,7 +107,7 @@ $(document).ready(function () {
       nextText: "Next",
       onPageClick: function (pageNumber) {
         $.LoadingOverlay("show");
-        loadData(`${API_URL}/customer/list?${currentRequestForm}&page=${pageNumber}&size=${ITEMS_ON_PAGE}`, callback);
+        loadData(`${API_URL}/customer?request=list&${currentRequestForm}&page=${pageNumber}&size=${ITEMS_ON_PAGE}`, callback);
       }
     });
   }
@@ -113,6 +119,7 @@ $(document).ready(function () {
   const fetchFirstPagination = (url, callback) => {
     fetch(url).then(res => res.json()).then(count => {
       customerPagination(count, ITEMS_ON_PAGE, 1, callback);
+      $('.table-header')[0].innerHTML = `Tìm thấy ${count} kết quả`;
       callback();
     })
       .catch(e => {
@@ -125,8 +132,8 @@ $(document).ready(function () {
   const fetchData = async () => {
     $.LoadingOverlay("show");
     currentRequestForm = $('#customer_form').serialize();
-    loadData(`${API_URL}/customer/list?${currentRequestForm}&page=1&size=${ITEMS_ON_PAGE}`, () => {
-      fetchFirstPagination(`${API_URL}/customer/count?${currentRequestForm}&page=1&size=${ITEMS_ON_PAGE}`, hideLoading);
+    loadData(`${API_URL}/customer?request=list&${currentRequestForm}&page=1&size=${ITEMS_ON_PAGE}`, () => {
+      fetchFirstPagination(`${API_URL}/customer?request=count&${currentRequestForm}&page=1&size=${ITEMS_ON_PAGE}`, hideLoading);
     });
   }
 
@@ -146,11 +153,11 @@ $(document).ready(function () {
     let customerId = id.substr(id.indexOf("_code") + 5);
     $('#assign_customerId').val(customerId);
     var data = "";
-    fetch(`${API_URL}/staff/assignment-customer?id=${customerId}`)
+    fetch(`${API_URL}/staff?request=assign-customer&id=${customerId}`)
       .then(res => res.json())
       .then(res => {
         res.map(e => {
-          data += '<tr> <td><input type="hidden" id="assignstaff_code' + e[0] + '"> <input type="checkbox"' + e[2] + ' ></td> <td>' + e[1] + '</td> </tr>';
+          data += `<tr> <td><input type="hidden" id="assignstaff_code${e.id}"> <input type="checkbox"  ${e.checked} ></td> <td> ${normalizeData(e.fullname)} </td> </tr>`;
         })
         tbody.innerHTML = data;
         $.LoadingOverlay("hide");
@@ -171,7 +178,7 @@ $(document).ready(function () {
     let id = $(this).attr('id');
     let customerId = id.substr(id.indexOf("_code") + 5);
     $('#modal_customerId').val(customerId);
-    fetch(`${API_URL}/customer?id=${customerId}`)
+    fetch(`${API_URL}/customer?request=find-by-id&id=${customerId}`)
       .then(res => res.json())
       .then(res => {
         $('#customerForm')[0].reset();
@@ -303,7 +310,7 @@ $(document).ready(function () {
       currentTourLoadMoreIndex += 1;
       page = currentTourLoadMoreIndex;
     }
-    fetch(`${API_URL}/transaction/list?customerId=${customerId}&type=${type}&page=${page}&size=${ITEMS_ON_PAGE}`)
+    fetch(`${API_URL}/transaction?request=list&customerId=${customerId}&type=${type}&page=${page}&size=${ITEMS_ON_PAGE}`)
       .then(res => res.json())
       .then(res => {
         res.map(e => {
@@ -333,15 +340,7 @@ $(document).ready(function () {
     for (let i = 0; i < inputList.length; i++) {
       const data = map.get(inputList[i]['name']);
       if (!!data) {
-        if (inputList[i]['name'] == 'customerType') {
-          if (obj.customerType.includes(inputList[i]['value'])) {
-            inputList[i]['checked'] = true;
-          }
-        }
-        else {
           inputList[i]['value'] = data;
-        }
-
       }
     }
   }
@@ -457,7 +456,7 @@ $(document).ready(function () {
     });
     customerId = (parseInt($('#assign_customerId').attr('value')));
     let data = { staffId, customerId };
-
+    
     $.confirm({
       title: false,
       content: 'Bạn có muốn thực hiện các thay đổi!',
@@ -467,7 +466,7 @@ $(document).ready(function () {
           btnClass: 'btn-danger',
           action: () => {
             $.LoadingOverlay("show");
-            fetch(`${API_URL}/staff/assignment-customer`, {
+            fetch(`${API_URL}/staff?request=assign-customer`, {
               method: 'POST', // or 'PUT'
               body: JSON.stringify(data), // data can be `string` or {object}!
               headers: {
@@ -499,15 +498,12 @@ $(document).ready(function () {
     var data = {};
     $.each(x, function (i, field) {
       data[field.name] = field.value;
-      if (field.name == 'customerType') {
-        type.push(field.value);
-      }
     });
     let method = 'POST';
     if ((!!$('#modal_customerId')[0].value)) {
       method = 'PUT';
     }
-    data['customerType'] = type;
+    console.log(JSON.stringify(data));
     $.confirm({
       title: false,
       content: 'Bạn có muốn thực hiện các thay đổi!',
@@ -534,7 +530,7 @@ $(document).ready(function () {
                 } else {
                   const pageString = $('#pagination-container .active > span')[0].innerHTML;
                   const pageNumber = parseInt(pageString);
-                  loadData(`${API_URL}/customer/list?${currentRequestForm}&page=${pageNumber}&size=${ITEMS_ON_PAGE}`, () => {
+                  loadData(`${API_URL}/customer?request=list&${currentRequestForm}&page=${pageNumber}&size=${ITEMS_ON_PAGE}`, () => {
                     hideLoading();
                     $.alert('Thực hiện thành công');
                   });
