@@ -1,5 +1,6 @@
 package com.javaweb.utils;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
@@ -10,8 +11,9 @@ import org.apache.commons.beanutils.BeanUtils;
 public class FormUtils {
 
 	@SuppressWarnings("unchecked")
-	public static <T> T toModel(Class<T> tclass, HttpServletRequest req) {
+	public static <T> T toModel(Class<T> tclass, HttpServletRequest req) throws UnsupportedEncodingException {
 		Object t = null;
+		req.setCharacterEncoding("UTF-8");
 		try {
 			t = tclass.newInstance();
 			Map<String, String[]> map = req.getParameterMap();;

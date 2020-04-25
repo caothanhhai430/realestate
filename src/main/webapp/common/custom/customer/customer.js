@@ -107,7 +107,7 @@ $(document).ready(function () {
       nextText: "Next",
       onPageClick: function (pageNumber) {
         $.LoadingOverlay("show");
-        loadData(`${API_URL}/customer?request=list&${currentRequestForm}&page=${pageNumber}&size=${ITEMS_ON_PAGE}`, callback);
+        loadData(`${API_URL}/customer/list?${currentRequestForm}&page=${pageNumber}&size=${ITEMS_ON_PAGE}`, callback);
       }
     });
   }
@@ -132,8 +132,8 @@ $(document).ready(function () {
   const fetchData = async () => {
     $.LoadingOverlay("show");
     currentRequestForm = $('#customer_form').serialize();
-    loadData(`${API_URL}/customer?request=list&${currentRequestForm}&page=1&size=${ITEMS_ON_PAGE}`, () => {
-      fetchFirstPagination(`${API_URL}/customer?request=count&${currentRequestForm}&page=1&size=${ITEMS_ON_PAGE}`, hideLoading);
+    loadData(`${API_URL}/customer/list?${currentRequestForm}&page=1&size=${ITEMS_ON_PAGE}`, () => {
+      fetchFirstPagination(`${API_URL}/customer/count?${currentRequestForm}&page=1&size=${ITEMS_ON_PAGE}`, hideLoading);
     });
   }
 
@@ -153,7 +153,7 @@ $(document).ready(function () {
     let customerId = id.substr(id.indexOf("_code") + 5);
     $('#assign_customerId').val(customerId);
     var data = "";
-    fetch(`${API_URL}/staff?request=assign-customer&id=${customerId}`)
+    fetch(`${API_URL}/staff/assign-customer?id=${customerId}`)
       .then(res => res.json())
       .then(res => {
         res.map(e => {
@@ -178,7 +178,7 @@ $(document).ready(function () {
     let id = $(this).attr('id');
     let customerId = id.substr(id.indexOf("_code") + 5);
     $('#modal_customerId').val(customerId);
-    fetch(`${API_URL}/customer?request=find-by-id&id=${customerId}`)
+    fetch(`${API_URL}/customer/find-by-id?id=${customerId}`)
       .then(res => res.json())
       .then(res => {
         $('#customerForm')[0].reset();
@@ -310,7 +310,7 @@ $(document).ready(function () {
       currentTourLoadMoreIndex += 1;
       page = currentTourLoadMoreIndex;
     }
-    fetch(`${API_URL}/transaction?request=list&customerId=${customerId}&type=${type}&page=${page}&size=${ITEMS_ON_PAGE}`)
+    fetch(`${API_URL}/transaction/list?customerId=${customerId}&type=${type}&page=${page}&size=${ITEMS_ON_PAGE}`)
       .then(res => res.json())
       .then(res => {
         res.map(e => {
@@ -466,7 +466,7 @@ $(document).ready(function () {
           btnClass: 'btn-danger',
           action: () => {
             $.LoadingOverlay("show");
-            fetch(`${API_URL}/staff?request=assign-customer`, {
+            fetch(`${API_URL}/staff/assign-customer`, {
               method: 'POST', // or 'PUT'
               body: JSON.stringify(data), // data can be `string` or {object}!
               headers: {
@@ -530,7 +530,7 @@ $(document).ready(function () {
                 } else {
                   const pageString = $('#pagination-container .active > span')[0].innerHTML;
                   const pageNumber = parseInt(pageString);
-                  loadData(`${API_URL}/customer?request=list&${currentRequestForm}&page=${pageNumber}&size=${ITEMS_ON_PAGE}`, () => {
+                  loadData(`${API_URL}/customer/list?${currentRequestForm}&page=${pageNumber}&size=${ITEMS_ON_PAGE}`, () => {
                     hideLoading();
                     $.alert('Thực hiện thành công');
                   });

@@ -1,6 +1,7 @@
 package com.javaweb.dto;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class AbstractDTO {
 
@@ -10,6 +11,13 @@ public class AbstractDTO {
 	protected String modifiedBy;
 	protected Integer page;
 	protected Integer size;
+
+	public AbstractDTO(){
+		this.createdDate = Timestamp.valueOf(LocalDateTime.now());
+		this.modifiedDate = Timestamp.valueOf(LocalDateTime.now());
+		this.createdBy = "ADMIN";
+		this.modifiedBy = "ADMIN";
+	}
 
 	public Timestamp getCreatedDate() {
 		return createdDate;

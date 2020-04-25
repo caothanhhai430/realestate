@@ -77,7 +77,7 @@ $(document).ready(function () {
       nextText: "Next",
       onPageClick: function (pageNumber) {
         $.LoadingOverlay("show");
-        loadData(`${API_URL}/building?request=list&${currentRequestForm}&page=${pageNumber}&size=${ITEMS_ON_PAGE}`, callback);
+        loadData(`${API_URL}/building/list?${currentRequestForm}&page=${pageNumber}&size=${ITEMS_ON_PAGE}`, callback);
       }
     });
   }
@@ -101,8 +101,8 @@ $(document).ready(function () {
   const fetchData = async () => {
     $.LoadingOverlay("show");
     currentRequestForm = $('#building_form').serialize();
-    loadData(`${API_URL}/building?request=list&${currentRequestForm}&page=1&size=${ITEMS_ON_PAGE}`, () => {
-      fetchFirstPagination(`${API_URL}/building?request=count&${currentRequestForm}`, hideLoading);
+    loadData(`${API_URL}/building/list?${currentRequestForm}&page=1&size=${ITEMS_ON_PAGE}`, () => {
+      fetchFirstPagination(`${API_URL}/building/count?${currentRequestForm}`, hideLoading);
     })
   }
 
@@ -122,7 +122,7 @@ $(document).ready(function () {
     let buildingId = id.substr(id.indexOf("_code") + 5);
     $('#assign_buildingId').val(buildingId);
     var data = "";
-    fetch(`${API_URL}/staff?request=assign-building&id=${buildingId}`)
+    fetch(`${API_URL}/staff/assign-building?id=${buildingId}`)
       .then(res => res.json())
       .then(res => {
         res.map(e => {
@@ -147,7 +147,7 @@ $(document).ready(function () {
     let id = $(this).attr('id');
     let buildingId = id.substr(id.indexOf("_code") + 5);
     $('#modal_buildingId').val(buildingId);
-    fetch(`${API_URL}/building?request=find-by-id&id=${buildingId}`)
+    fetch(`${API_URL}/building/find-by-id?id=${buildingId}`)
       .then(res => res.json())
       .then(res => {
         $('#buildingForm')[0].reset();
@@ -306,7 +306,7 @@ $(document).ready(function () {
           btnClass: 'btn-danger',
           action: () => {
             $.LoadingOverlay("show");
-            fetch(`${API_URL}/staff?request=assign-building`, {
+            fetch(`${API_URL}/staff/assign-building`, {
               method: 'POST', // or 'PUT'
               body: JSON.stringify(data), // data can be `string` or {object}!
               headers: {
@@ -374,7 +374,7 @@ $(document).ready(function () {
                 } else {
                   const pageString = $('#pagination-container .active > span')[0].innerHTML;
                   const pageNumber = parseInt(pageString);
-                  loadData(`${API_URL}/building?request=list&${currentRequestForm}&page=${pageNumber}&size=${ITEMS_ON_PAGE}`, () => {
+                  loadData(`${API_URL}/building/list?${currentRequestForm}&page=${pageNumber}&size=${ITEMS_ON_PAGE}`, () => {
                     hideLoading();
                     $.alert('Thực hiện thành công');
                   })
