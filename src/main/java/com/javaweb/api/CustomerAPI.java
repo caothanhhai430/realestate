@@ -77,6 +77,7 @@ public class CustomerAPI extends HttpServlet{
 
 	@RequestMapping(method = RequestMethod.POST)
 	private CustomerDTO newCustomer(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		req.setCharacterEncoding("UTF-8");
 		CustomerDTO customer = HttpUtil.of(req.getReader()).toModel(CustomerDTO.class);
 		Long id = service.save(customer);
 		CustomerDTO get = service.findById(id);
