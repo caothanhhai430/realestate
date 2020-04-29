@@ -2,16 +2,14 @@ package com.javaweb.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaweb.Exception.TransactionFailedException;
-import com.javaweb.annotation.HandleRequest;
 import com.javaweb.annotation.RequestMapping;
 import com.javaweb.annotation.RestController;
+import com.javaweb.controller.admin.HttpServletCustom;
 import com.javaweb.enums.RequestMethod;
 import com.javaweb.service.IUserService;
 
 import javax.inject.Inject;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -21,7 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @WebServlet(urlPatterns= {"/api-server/staff/*"})
-public class UserAPI extends HttpServlet{
+public class UserAPI extends HttpServletCustom {
 
 	private static final long serialVersionUID = 1L;
 
@@ -79,18 +77,5 @@ public class UserAPI extends HttpServlet{
 		}
 		return result;
 	}
-
-
-	@Override
-	@HandleRequest
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	}
-
-
-	@Override
-	@HandleRequest
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	}
-
 
 }

@@ -1,8 +1,8 @@
 package com.javaweb.api;
 
-import com.javaweb.annotation.HandleRequest;
 import com.javaweb.annotation.RequestMapping;
 import com.javaweb.annotation.RestController;
+import com.javaweb.controller.admin.HttpServletCustom;
 import com.javaweb.dto.TransactionDTO;
 import com.javaweb.enums.RequestMethod;
 import com.javaweb.paging.impl.PageRequest;
@@ -11,9 +11,7 @@ import com.javaweb.utils.FormUtils;
 import com.javaweb.utils.HttpUtil;
 
 import javax.inject.Inject;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -21,7 +19,7 @@ import java.util.List;
 
 @RestController
 @WebServlet(urlPatterns= {"/api-server/transaction/*"})
-public class TransactionAPI extends HttpServlet{
+public class TransactionAPI extends HttpServletCustom {
 
 	private static final long serialVersionUID = 1L;
 
@@ -54,16 +52,5 @@ public class TransactionAPI extends HttpServlet{
 		return get;
 	}
 
-
-
-	@HandleRequest
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	}
-
-	@HandleRequest
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	}
 
 }

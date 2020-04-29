@@ -1,41 +1,28 @@
 package com.javaweb.api;
 
-import java.io.IOException;
-
-import java.io.UnsupportedEncodingException;
-import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.javaweb.annotation.HandleRequest;
 import com.javaweb.annotation.RequestMapping;
 import com.javaweb.annotation.RestController;
+import com.javaweb.controller.admin.HttpServletCustom;
 import com.javaweb.dto.CustomerDTO;
 import com.javaweb.enums.RequestMethod;
 import com.javaweb.paging.impl.PageRequest;
 import com.javaweb.service.ICustomerService;
-import com.javaweb.service.impl.CustomerService;
 import com.javaweb.utils.FormUtils;
 import com.javaweb.utils.HttpUtil;
-import org.apache.commons.beanutils.BeanUtils;
+
+import javax.inject.Inject;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @WebServlet(urlPatterns= {"/api-server/customer/*"})
-public class CustomerAPI extends HttpServlet{
-
-	private static final long serialVersionUID = 13213213213214124L;
+public class CustomerAPI extends HttpServletCustom {
 
 	@Inject
 	ICustomerService service;
@@ -103,26 +90,6 @@ public class CustomerAPI extends HttpServlet{
 		return res;
 	}
 
-	@HandleRequest
-	@Override
-	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	}
-
-	@HandleRequest
-	@Override
-	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	}
-
-
-	@HandleRequest
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	}
-
-	@HandleRequest
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	}
 
 
 }

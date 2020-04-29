@@ -8,6 +8,7 @@ import com.javaweb.utils.EnumUtils;
 
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,7 +20,7 @@ import java.util.Map;
 
 
 @WebServlet(urlPatterns = {"/admin/building/*"})
-public class BuildingController extends HttpServlet{
+public class BuildingController extends HttpServletCustom {
 
 	@Inject
 	private IUserService userService;
@@ -39,17 +40,6 @@ public class BuildingController extends HttpServlet{
 		rd.forward(req, resp);
 	}
 
-
-	@Override
-	@HandleRequest
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	}
-
-
-	@Override
-	@HandleRequest
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	}
 
 
 }

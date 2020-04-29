@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @WebServlet(urlPatterns = {"/admin/customer/*"})
-public class CustomerController extends HttpServlet{
+public class CustomerController extends HttpServletCustom{
 
 	@Inject
 	private IUserService userService;
@@ -32,18 +32,6 @@ public class CustomerController extends HttpServlet{
 		req.setAttribute("staffMap",listActiveStaff);
 		RequestDispatcher rd = req.getRequestDispatcher("/views/customer/customerlist.jsp");
 		rd.forward(req, resp);
-	}
-
-
-	@Override
-	@HandleRequest
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	}
-
-
-	@Override
-	@HandleRequest
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	}
 
 

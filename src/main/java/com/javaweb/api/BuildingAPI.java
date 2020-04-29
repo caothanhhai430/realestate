@@ -1,9 +1,9 @@
 package com.javaweb.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.javaweb.annotation.HandleRequest;
 import com.javaweb.annotation.RequestMapping;
 import com.javaweb.annotation.RestController;
+import com.javaweb.controller.admin.HttpServletCustom;
 import com.javaweb.dto.BuildingDTO;
 import com.javaweb.enums.RequestMethod;
 import com.javaweb.paging.impl.PageRequest;
@@ -12,9 +12,7 @@ import com.javaweb.utils.FormUtils;
 import com.javaweb.utils.HttpUtil;
 
 import javax.inject.Inject;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -24,9 +22,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @WebServlet(urlPatterns= {"/api-server/building/*"})
-public class BuildingAPI extends HttpServlet{
-
-	private static final long serialVersionUID = 1L;
+public class BuildingAPI extends HttpServletCustom {
 
 	@Inject
 	IBuildingService service;
@@ -97,30 +93,6 @@ public class BuildingAPI extends HttpServlet{
 		List<Long> arrIds = list.stream().map(e-> e.longValue()).collect(Collectors.toList());
 		boolean res = service.delete(arrIds);
 		return res;
-	}
-
-
-	@Override
-	@HandleRequest
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	}
-
-
-	@Override
-	@HandleRequest
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	}
-
-
-	@Override
-	@HandleRequest
-	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	}
-
-
-	@Override
-	@HandleRequest
-	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	}
 
 }
